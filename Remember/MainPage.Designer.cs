@@ -35,7 +35,6 @@ namespace Remember
             this.TxtFileInput = new System.Windows.Forms.TextBox();
             this.BtnAddProgram = new System.Windows.Forms.Button();
             this.LblName = new System.Windows.Forms.Label();
-            this.LblLocation = new System.Windows.Forms.Label();
             this.LblSize = new System.Windows.Forms.Label();
             this.PBoxIcon = new System.Windows.Forms.PictureBox();
             this.LblIcon = new System.Windows.Forms.Label();
@@ -54,6 +53,7 @@ namespace Remember
             this.LblParameters = new System.Windows.Forms.Label();
             this.TxtParametersInput = new System.Windows.Forms.TextBox();
             this.PnlParam = new System.Windows.Forms.Panel();
+            this.BtnLocation = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PBoxIcon)).BeginInit();
             this.PnlLoc.SuspendLayout();
             this.PnlName.SuspendLayout();
@@ -106,15 +106,6 @@ namespace Remember
             this.LblName.TabIndex = 6;
             this.LblName.Text = "Name:";
             // 
-            // LblLocation
-            // 
-            this.LblLocation.AutoSize = true;
-            this.LblLocation.Location = new System.Drawing.Point(1, 5);
-            this.LblLocation.Name = "LblLocation";
-            this.LblLocation.Size = new System.Drawing.Size(54, 13);
-            this.LblLocation.TabIndex = 12;
-            this.LblLocation.Text = "Location:";
-            // 
             // LblSize
             // 
             this.LblSize.AutoSize = true;
@@ -164,8 +155,8 @@ namespace Remember
             // PnlLoc
             // 
             this.PnlLoc.AutoScroll = true;
+            this.PnlLoc.Controls.Add(this.BtnLocation);
             this.PnlLoc.Controls.Add(this.TxtLocationInput);
-            this.PnlLoc.Controls.Add(this.LblLocation);
             this.PnlLoc.Location = new System.Drawing.Point(439, 148);
             this.PnlLoc.Name = "PnlLoc";
             this.PnlLoc.Size = new System.Drawing.Size(423, 38);
@@ -189,6 +180,7 @@ namespace Remember
             this.BtnEdit.TabIndex = 22;
             this.BtnEdit.Text = "Edit";
             this.BtnEdit.UseVisualStyleBackColor = true;
+            this.BtnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
             // 
             // BtnDelete
             // 
@@ -275,6 +267,16 @@ namespace Remember
             this.PnlParam.Size = new System.Drawing.Size(423, 38);
             this.PnlParam.TabIndex = 14;
             // 
+            // BtnLocation
+            // 
+            this.BtnLocation.Location = new System.Drawing.Point(0, 0);
+            this.BtnLocation.Name = "BtnLocation";
+            this.BtnLocation.Size = new System.Drawing.Size(61, 23);
+            this.BtnLocation.TabIndex = 23;
+            this.BtnLocation.Text = "Location";
+            this.BtnLocation.UseVisualStyleBackColor = true;
+            this.BtnLocation.Click += new System.EventHandler(this.BtnLocation_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -325,7 +327,6 @@ namespace Remember
         private System.Windows.Forms.TextBox TxtFileInput;
         private System.Windows.Forms.Button BtnAddProgram;
         private System.Windows.Forms.Label LblName;
-        private System.Windows.Forms.Label LblLocation;
         private System.Windows.Forms.Label LblSize;
         private System.Windows.Forms.PictureBox PBoxIcon;
         private System.Windows.Forms.Label LblIcon;
@@ -344,6 +345,7 @@ namespace Remember
         private System.Windows.Forms.Label LblParameters;
         private System.Windows.Forms.TextBox TxtParametersInput;
         private System.Windows.Forms.Panel PnlParam;
+        private System.Windows.Forms.Button BtnLocation;
     }
 }
 

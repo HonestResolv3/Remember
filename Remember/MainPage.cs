@@ -58,13 +58,17 @@ namespace Remember
                 TxtFileInput.Text = dialog.FileName;
         }
 
+        private void BtnLocation_Click(object sender, EventArgs e)
+        {
+            dialog.ShowDialog();
+            if (!string.IsNullOrWhiteSpace(dialog.FileName))
+                TxtLocationInput.Text = dialog.FileName;
+        }
+
         private void BtnLaunchProgram_Click(object sender, EventArgs e)
         {
-            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
-            {
-                MessageBox.Show("Please select a program from the list to launch!", "Select A Program", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!CheckForSelection("Please select a program from the list to launch!", "Select A Program"))
                 return;
-            }
 
             ProgramData obj = (ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex];
             string parameters = !obj.Parameters.Equals("None", StringComparison.OrdinalIgnoreCase) ? obj.Parameters : "";
@@ -91,17 +95,27 @@ namespace Remember
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+            if (!CheckForSelection("Please select a program from the list to delete!", "Select A Program"))
                 return;
 
             data.RemoveAt(LstProgramList.SelectedIndex);
             ClearContents();
-            foreach (ProgramData prog in data)
-            {
-                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
-                File.AppendAllText(dataLocation, jsonOutput);
-                LstProgramList.Items.Add(prog);
-            }
+            ReloadContents();
+        }
+
+        private void BtnEdit_Click(object sender, EventArgs e)
+        {
+            if (!CheckForSelection("Please select a program from the list to edit!", "Select A Program"))
+                return;
+
+            data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name;data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name;
+            data.ElementAt(LstProgramList.SelectedIndex).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Location;
+            data.ElementAt(LstProgramList.SelectedIndex).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Parameters;
+            data.ElementAt(LstProgramList.SelectedIndex).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(LstProgramList.SelectedIndex).Location);
+            if (PBoxIcon.Image != null)
+                PBoxIcon.Image.Dispose();
+            PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(LstProgramList.SelectedIndex).Icon.Handle);
+            ReloadContents();
         }
 
         private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
@@ -123,6 +137,16 @@ namespace Remember
         private void MainPage_Load(object sender, EventArgs e)
         {
             CallLoadFile();
+        }
+
+        private bool CheckForSelection(string message, string title)
+        {
+            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+            {
+                MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
 
         private void CallLoadFile()
@@ -166,6 +190,18 @@ namespace Remember
             TxtLocationInput.Clear();
             TxtParametersInput.Clear();
             TxtSize.Clear();
+        }
+
+        private void ReloadContents()
+        {
+            File.WriteAllText(dataLocation, "");
+            LstProgramList.Items.Clear();
+            foreach (ProgramData prog in data)
+            {
+                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                File.AppendAllText(dataLocation, jsonOutput);
+                LstProgramList.Items.Add(prog);
+            }
         }
 
         /**

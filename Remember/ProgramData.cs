@@ -10,11 +10,11 @@ namespace Remember
 
         public string FileName { get; }
 
-        public string Location { get; }
+        public string Location { get; set;  }
 
-        public string Parameters { get; }
+        public string Parameters { get; set;  }
 
-        public long Size { get; }
+        public long Size { get; set; }
 
         [JsonIgnore]
         public Icon Icon { get; set; }
