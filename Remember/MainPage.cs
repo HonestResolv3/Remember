@@ -13,7 +13,7 @@ namespace Remember
 {
     public partial class MainPage : Form
     {
-        List<ProgramData> data;
+        List<ProgramData> data = new List<ProgramData>();
         readonly OpenFileDialog dialog = new OpenFileDialog()
         {
             Title = "Find program to store",
@@ -39,13 +39,13 @@ namespace Remember
 
             FileInfo fInfo = new FileInfo(TxtFileInput.Text);
             Icon icon = Icon.ExtractAssociatedIcon(fInfo.FullName);
+            string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
+            name = string.IsNullOrWhiteSpace(name) ? fInfo.Name : name;
             string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
             parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
-            string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
-            name = string.IsNullOrWhiteSpace(parameters) ? fInfo.Name : name;
-            MessageBox.Show(name);
             ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, fInfo.Length, icon);
             LstProgramList.Items.Add(prog);
+            data.Add(prog);
             string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
             File.AppendAllText(dataLocation, jsonOutput);
             MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -56,11 +56,6 @@ namespace Remember
             dialog.ShowDialog();
             if (!string.IsNullOrWhiteSpace(dialog.FileName))
                 TxtFileInput.Text = dialog.FileName;
-        }
-
-        private void BtnRefresh_Click(object sender, EventArgs e)
-        {
-            CallLoadFile();
         }
 
         private void BtnLaunchProgram_Click(object sender, EventArgs e)
@@ -89,6 +84,26 @@ namespace Remember
             
         }
 
+        private void BtnRefresh_Click(object sender, EventArgs e)
+        {
+            CallLoadFile();
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+                return;
+
+            data.RemoveAt(LstProgramList.SelectedIndex);
+            ClearContents();
+            foreach (ProgramData prog in data)
+            {
+                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                File.AppendAllText(dataLocation, jsonOutput);
+                LstProgramList.Items.Add(prog);
+            }
+        }
+
         private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
@@ -98,11 +113,11 @@ namespace Remember
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(obj.Icon.Handle);
-            LblName.Text = "Name: " + obj.Name;
-            LblFileName.Text = "File Name: " + obj.FileName;
-            LblLocation.Text = "Location: " + obj.Location;
-            LblParameters.Text = "Parameters: " + (!string.IsNullOrWhiteSpace(obj.Parameters) ? obj.Parameters : "None");
-            LblSize.Text = "Size: " + GetBytesReadable(obj.Size);
+            TxtNameInput.Text = obj.Name;
+            TxtFileNameInput.Text = obj.FileName;
+            TxtLocationInput.Text = obj.Location;
+            TxtParametersInput.Text = !string.IsNullOrWhiteSpace(obj.Parameters) ? obj.Parameters : "None";
+            TxtSize.Text = GetBytesReadable(obj.Size);
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -130,11 +145,27 @@ namespace Remember
             LstProgramList.Items.Clear();
             data = File.ReadAllLines(dataLocation)
                 .Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
+
             foreach (ProgramData prog in data)
             {
+                if (prog == null)
+                    continue;
+
                 prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
                 LstProgramList.Items.Add(prog);
             }
+        }
+
+        private void ClearContents()
+        {
+            File.WriteAllText(dataLocation, "");
+            LstProgramList.Items.Clear();
+            TxtNameInput.Clear();
+            TxtFileInput.Clear();
+            TxtFileNameInput.Clear();
+            TxtLocationInput.Clear();
+            TxtParametersInput.Clear();
+            TxtSize.Clear();
         }
 
         /**
