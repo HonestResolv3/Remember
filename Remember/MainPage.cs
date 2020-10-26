@@ -112,10 +112,12 @@ namespace Remember
             data.ElementAt(LstProgramList.SelectedIndex).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Location;
             data.ElementAt(LstProgramList.SelectedIndex).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Parameters;
             data.ElementAt(LstProgramList.SelectedIndex).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(LstProgramList.SelectedIndex).Location);
+            FileInfo fInfo = new FileInfo(data.ElementAt(LstProgramList.SelectedIndex).Location);
+            data.ElementAt(LstProgramList.SelectedIndex).Size = fInfo.Length;
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(LstProgramList.SelectedIndex).Icon.Handle);
-            ReloadContents();
+            ReloadContents(LstProgramList.SelectedIndex);
         }
 
         private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
@@ -190,6 +192,19 @@ namespace Remember
             TxtLocationInput.Clear();
             TxtParametersInput.Clear();
             TxtSize.Clear();
+        }
+
+        private void ReloadContents(int index)
+        {
+            File.WriteAllText(dataLocation, "");
+            LstProgramList.Items.Clear();
+            foreach (ProgramData prog in data)
+            {
+                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                File.AppendAllText(dataLocation, jsonOutput);
+                LstProgramList.Items.Add(prog);
+            }
+            LstProgramList.SelectedIndex = index;
         }
 
         private void ReloadContents()
