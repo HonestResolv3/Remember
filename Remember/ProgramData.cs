@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Remember
 {
     class ProgramData
     {
-        public string Name { get; }
+        public string Name { get; set; }
+
+        public string FileName { get; }
 
         public string Location { get; }
 
@@ -16,9 +19,10 @@ namespace Remember
         [JsonIgnore]
         public Icon Icon { get; set; }
 
-        public ProgramData(string name, string location, string parameters, long size, Icon icon)
+        public ProgramData(string name, string fileName, string location, string parameters, long size, Icon icon)
         {
             Name = name;
+            FileName = fileName;
             Location = location;
             Parameters = parameters;
             Size = size;
@@ -27,7 +31,7 @@ namespace Remember
 
         public override string ToString()
         {
-            return Name.Substring(0, Name.LastIndexOf("."));
+            return Name;
         }
     }
 }

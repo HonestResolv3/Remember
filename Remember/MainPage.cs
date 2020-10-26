@@ -13,6 +13,7 @@ namespace Remember
 {
     public partial class MainPage : Form
     {
+        List<ProgramData> data;
         readonly OpenFileDialog dialog = new OpenFileDialog()
         {
             Title = "Find program to store",
@@ -21,7 +22,6 @@ namespace Remember
             CheckPathExists = true,
             RestoreDirectory = true
         };
-
         readonly string dataLocation = Assembly.GetExecutingAssembly().Location.Substring(0, Assembly.GetExecutingAssembly().Location.LastIndexOf("\\")) + "\\programdata.json";
 
         public MainPage()
@@ -41,7 +41,10 @@ namespace Remember
             Icon icon = Icon.ExtractAssociatedIcon(fInfo.FullName);
             string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
             parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
-            ProgramData prog = new ProgramData(fInfo.Name, fInfo.FullName, parameters, fInfo.Length, icon);
+            string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
+            name = string.IsNullOrWhiteSpace(parameters) ? fInfo.Name : name;
+            MessageBox.Show(name);
+            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, fInfo.Length, icon);
             LstProgramList.Items.Add(prog);
             string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
             File.AppendAllText(dataLocation, jsonOutput);
@@ -88,11 +91,15 @@ namespace Remember
 
         private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+                return;
+
             ProgramData obj = (ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex];
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(obj.Icon.Handle);
             LblName.Text = "Name: " + obj.Name;
+            LblFileName.Text = "File Name: " + obj.FileName;
             LblLocation.Text = "Location: " + obj.Location;
             LblParameters.Text = "Parameters: " + (!string.IsNullOrWhiteSpace(obj.Parameters) ? obj.Parameters : "None");
             LblSize.Text = "Size: " + GetBytesReadable(obj.Size);
@@ -121,9 +128,9 @@ namespace Remember
                 return;
 
             LstProgramList.Items.Clear();
-            List<ProgramData> dataObjects = File.ReadAllLines(dataLocation)
+            data = File.ReadAllLines(dataLocation)
                 .Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
-            foreach (ProgramData prog in dataObjects)
+            foreach (ProgramData prog in data)
             {
                 prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
                 LstProgramList.Items.Add(prog);
@@ -131,7 +138,7 @@ namespace Remember
         }
 
         /**
-         * Credit to user https://stackoverflow.com/users/553396/humbads
+         * Credit to user from StackOverflow: https://stackoverflow.com/users/553396/humbads
          * Post from site: https://www.somacon.com/p576.php
          */
         private string GetBytesReadable(long i)
@@ -143,32 +150,32 @@ namespace Remember
             double readable;
             if (absolute_i >= 0x1000000000000000) // Exabyte
             {
-                suffix = "EB";
+                suffix = " EB";
                 readable = (i >> 50);
             }
             else if (absolute_i >= 0x4000000000000) // Petabyte
             {
-                suffix = "PB";
+                suffix = " PB";
                 readable = (i >> 40);
             }
             else if (absolute_i >= 0x10000000000) // Terabyte
             {
-                suffix = "TB";
+                suffix = " TB";
                 readable = (i >> 30);
             }
             else if (absolute_i >= 0x40000000) // Gigabyte
             {
-                suffix = "GB";
+                suffix = " GB";
                 readable = (i >> 20);
             }
             else if (absolute_i >= 0x100000) // Megabyte
             {
-                suffix = "MB";
+                suffix = " MB";
                 readable = (i >> 10);
             }
             else if (absolute_i >= 0x400) // Kilobyte
             {
-                suffix = "KB";
+                suffix = " KB";
                 readable = i;
             }
             else
@@ -178,7 +185,7 @@ namespace Remember
             // Divide by 1024 to get fractional value
             readable /= 1024;
             // Return formatted number with suffix
-            return readable.ToString("0.### ") + suffix;
+            return readable.ToString("0.##") + suffix;
         }
     }
 }

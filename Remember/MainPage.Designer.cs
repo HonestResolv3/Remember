@@ -47,24 +47,30 @@ namespace Remember
             this.PnlName = new System.Windows.Forms.Panel();
             this.BtnEdit = new System.Windows.Forms.Button();
             this.BtnDelete = new System.Windows.Forms.Button();
+            this.PnlFileName = new System.Windows.Forms.Panel();
+            this.LblFileName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PBoxIcon)).BeginInit();
             this.PnlLoc.SuspendLayout();
             this.PnlParam.SuspendLayout();
             this.PnlName.SuspendLayout();
+            this.PnlFileName.SuspendLayout();
             this.SuspendLayout();
             // 
             // LstProgramList
             // 
+            this.LstProgramList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.LstProgramList.FormattingEnabled = true;
-            this.LstProgramList.Location = new System.Drawing.Point(12, 12);
+            this.LstProgramList.Location = new System.Drawing.Point(12, 13);
             this.LstProgramList.Name = "LstProgramList";
-            this.LstProgramList.Size = new System.Drawing.Size(423, 225);
+            this.LstProgramList.Size = new System.Drawing.Size(423, 277);
             this.LstProgramList.TabIndex = 0;
             this.LstProgramList.SelectedIndexChanged += new System.EventHandler(this.LstProgramList_SelectedIndexChanged);
             // 
             // BtnLoadFile
             // 
-            this.BtnLoadFile.Location = new System.Drawing.Point(12, 244);
+            this.BtnLoadFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnLoadFile.Location = new System.Drawing.Point(12, 302);
             this.BtnLoadFile.Name = "BtnLoadFile";
             this.BtnLoadFile.Size = new System.Drawing.Size(75, 23);
             this.BtnLoadFile.TabIndex = 4;
@@ -74,14 +80,16 @@ namespace Remember
             // 
             // TxtFileInput
             // 
-            this.TxtFileInput.Location = new System.Drawing.Point(93, 245);
+            this.TxtFileInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TxtFileInput.Location = new System.Drawing.Point(93, 303);
             this.TxtFileInput.Name = "TxtFileInput";
             this.TxtFileInput.Size = new System.Drawing.Size(261, 22);
             this.TxtFileInput.TabIndex = 6;
             // 
             // BtnAddProgram
             // 
-            this.BtnAddProgram.Location = new System.Drawing.Point(360, 244);
+            this.BtnAddProgram.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnAddProgram.Location = new System.Drawing.Point(360, 302);
             this.BtnAddProgram.Name = "BtnAddProgram";
             this.BtnAddProgram.Size = new System.Drawing.Size(75, 23);
             this.BtnAddProgram.TabIndex = 7;
@@ -119,7 +127,7 @@ namespace Remember
             // LblSize
             // 
             this.LblSize.AutoSize = true;
-            this.LblSize.Location = new System.Drawing.Point(441, 187);
+            this.LblSize.Location = new System.Drawing.Point(441, 237);
             this.LblSize.Name = "LblSize";
             this.LblSize.Size = new System.Drawing.Size(30, 13);
             this.LblSize.TabIndex = 11;
@@ -127,7 +135,7 @@ namespace Remember
             // 
             // PBoxIcon
             // 
-            this.PBoxIcon.Location = new System.Drawing.Point(479, 11);
+            this.PBoxIcon.Location = new System.Drawing.Point(479, 12);
             this.PBoxIcon.Name = "PBoxIcon";
             this.PBoxIcon.Size = new System.Drawing.Size(36, 37);
             this.PBoxIcon.TabIndex = 12;
@@ -144,7 +152,8 @@ namespace Remember
             // 
             // BtnLaunchProgram
             // 
-            this.BtnLaunchProgram.Location = new System.Drawing.Point(547, 214);
+            this.BtnLaunchProgram.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnLaunchProgram.Location = new System.Drawing.Point(566, 274);
             this.BtnLaunchProgram.Name = "BtnLaunchProgram";
             this.BtnLaunchProgram.Size = new System.Drawing.Size(75, 23);
             this.BtnLaunchProgram.TabIndex = 14;
@@ -154,7 +163,8 @@ namespace Remember
             // 
             // BtnRefresh
             // 
-            this.BtnRefresh.Location = new System.Drawing.Point(547, 243);
+            this.BtnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnRefresh.Location = new System.Drawing.Point(566, 303);
             this.BtnRefresh.Name = "BtnRefresh";
             this.BtnRefresh.Size = new System.Drawing.Size(75, 23);
             this.BtnRefresh.TabIndex = 15;
@@ -166,7 +176,7 @@ namespace Remember
             // 
             this.PnlLoc.AutoScroll = true;
             this.PnlLoc.Controls.Add(this.LblLocation);
-            this.PnlLoc.Location = new System.Drawing.Point(439, 98);
+            this.PnlLoc.Location = new System.Drawing.Point(439, 148);
             this.PnlLoc.Name = "PnlLoc";
             this.PnlLoc.Size = new System.Drawing.Size(381, 38);
             this.PnlLoc.TabIndex = 16;
@@ -175,7 +185,7 @@ namespace Remember
             // 
             this.PnlParam.AutoScroll = true;
             this.PnlParam.Controls.Add(this.LblParameters);
-            this.PnlParam.Location = new System.Drawing.Point(439, 142);
+            this.PnlParam.Location = new System.Drawing.Point(439, 192);
             this.PnlParam.Name = "PnlParam";
             this.PnlParam.Size = new System.Drawing.Size(381, 38);
             this.PnlParam.TabIndex = 17;
@@ -184,14 +194,15 @@ namespace Remember
             // 
             this.PnlName.AutoScroll = true;
             this.PnlName.Controls.Add(this.LblName);
-            this.PnlName.Location = new System.Drawing.Point(439, 54);
+            this.PnlName.Location = new System.Drawing.Point(439, 60);
             this.PnlName.Name = "PnlName";
             this.PnlName.Size = new System.Drawing.Size(381, 38);
             this.PnlName.TabIndex = 17;
             // 
             // BtnEdit
             // 
-            this.BtnEdit.Location = new System.Drawing.Point(628, 214);
+            this.BtnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnEdit.Location = new System.Drawing.Point(647, 274);
             this.BtnEdit.Name = "BtnEdit";
             this.BtnEdit.Size = new System.Drawing.Size(75, 23);
             this.BtnEdit.TabIndex = 18;
@@ -200,18 +211,38 @@ namespace Remember
             // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(628, 243);
+            this.BtnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BtnDelete.Location = new System.Drawing.Point(647, 303);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
             this.BtnDelete.TabIndex = 19;
             this.BtnDelete.Text = "Delete";
             this.BtnDelete.UseVisualStyleBackColor = true;
             // 
+            // PnlFileName
+            // 
+            this.PnlFileName.AutoScroll = true;
+            this.PnlFileName.Controls.Add(this.LblFileName);
+            this.PnlFileName.Location = new System.Drawing.Point(439, 104);
+            this.PnlFileName.Name = "PnlFileName";
+            this.PnlFileName.Size = new System.Drawing.Size(381, 38);
+            this.PnlFileName.TabIndex = 18;
+            // 
+            // LblFileName
+            // 
+            this.LblFileName.AutoSize = true;
+            this.LblFileName.Location = new System.Drawing.Point(3, 4);
+            this.LblFileName.Name = "LblFileName";
+            this.LblFileName.Size = new System.Drawing.Size(60, 13);
+            this.LblFileName.TabIndex = 8;
+            this.LblFileName.Text = "File Name:";
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(830, 315);
+            this.ClientSize = new System.Drawing.Size(830, 337);
+            this.Controls.Add(this.PnlFileName);
             this.Controls.Add(this.BtnDelete);
             this.Controls.Add(this.BtnEdit);
             this.Controls.Add(this.PnlName);
@@ -228,8 +259,10 @@ namespace Remember
             this.Controls.Add(this.LstProgramList);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(16, 316);
+            this.MaximumSize = new System.Drawing.Size(846, 655);
+            this.MinimumSize = new System.Drawing.Size(846, 376);
             this.Name = "MainPage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Remember";
             this.Load += new System.EventHandler(this.MainPage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PBoxIcon)).EndInit();
@@ -239,6 +272,8 @@ namespace Remember
             this.PnlParam.PerformLayout();
             this.PnlName.ResumeLayout(false);
             this.PnlName.PerformLayout();
+            this.PnlFileName.ResumeLayout(false);
+            this.PnlFileName.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -263,6 +298,8 @@ namespace Remember
         private System.Windows.Forms.Panel PnlName;
         private System.Windows.Forms.Button BtnEdit;
         private System.Windows.Forms.Button BtnDelete;
+        private System.Windows.Forms.Panel PnlFileName;
+        private System.Windows.Forms.Label LblFileName;
     }
 }
 
