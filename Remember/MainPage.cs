@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,12 +15,19 @@ namespace Remember
     public partial class MainPage : Form
     {
         List<ProgramData> data = new List<ProgramData>();
-        readonly OpenFileDialog dialog = new OpenFileDialog()
+        readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
         {
             Title = "Find program to store",
-            AutoUpgradeEnabled = true,
-            CheckFileExists = true,
-            CheckPathExists = true,
+            EnsureFileExists = true,
+            EnsurePathExists = true,
+            IsFolderPicker = false,
+            RestoreDirectory = true
+        };
+        readonly CommonOpenFileDialog folderChooserDialog = new CommonOpenFileDialog()
+        {
+            Title = "Find program to store",
+            EnsurePathExists = true,
+            IsFolderPicker = true,
             RestoreDirectory = true
         };
         readonly string dataLocation = Assembly.GetExecutingAssembly().Location.Substring(0, Assembly.GetExecutingAssembly().Location.LastIndexOf("\\")) + "\\programdata.json";
@@ -46,23 +54,21 @@ namespace Remember
             ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length, icon);
             LstProgramList.Items.Add(prog);
             data.Add(prog);
-            string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+            string jsonOutput = $"{JsonConvert.SerializeObject(prog)}\n";
             File.AppendAllText(dataLocation, jsonOutput);
             MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnLoadFile_Click(object sender, EventArgs e)
         {
-            dialog.ShowDialog();
-            if (!string.IsNullOrWhiteSpace(dialog.FileName))
-                TxtFileInput.Text = dialog.FileName;
+            if (fileChooserDialog.ShowDialog() == CommonFileDialogResult.Ok && !string.IsNullOrWhiteSpace(fileChooserDialog.FileName))
+                TxtFileInput.Text = fileChooserDialog.FileName;
         }
 
         private void BtnLocation_Click(object sender, EventArgs e)
         {
-            dialog.ShowDialog();
-            if (!string.IsNullOrWhiteSpace(dialog.FileName))
-                TxtLocationInput.Text = dialog.FileName;
+            if (fileChooserDialog.ShowDialog() == CommonFileDialogResult.Ok && !string.IsNullOrWhiteSpace(fileChooserDialog.FileName))
+                TxtLocationInput.Text = fileChooserDialog.FileName;
         }
 
         private void BtnLaunchProgram_Click(object sender, EventArgs e)
@@ -171,6 +177,16 @@ namespace Remember
             MessageBox.Show("This program was created by KoukoCocoa, it lets you store programs with locations and parameters, then load said programs", "About the program");
         }
 
+        private void MnuItmExport_Click(object sender, EventArgs e)
+        {
+            if (folderChooserDialog.ShowDialog() == CommonFileDialogResult.Ok && !string.IsNullOrWhiteSpace(folderChooserDialog.FileName))
+            {
+                string location = $"{folderChooserDialog.FileName}\\export.json";
+                ExportInformation(location);
+                MessageBox.Show($"The data has now been exported to {location}!", "Data Exported Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
         private bool CheckForSelection(string message, string title)
         {
             if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
@@ -233,6 +249,17 @@ namespace Remember
                 string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
                 File.AppendAllText(dataLocation, jsonOutput);
                 LstProgramList.Items.Add(prog);
+            }
+        }
+
+        private void ExportInformation(string location)
+        {
+            if (File.Exists(location))
+                File.WriteAllText(location, "");
+            foreach (ProgramData prog in data)
+            {
+                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                File.AppendAllText(location, jsonOutput);
             }
         }
 

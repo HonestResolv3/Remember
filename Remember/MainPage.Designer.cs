@@ -374,7 +374,8 @@ namespace Remember
             // 
             this.MnuItmExport.Name = "MnuItmExport";
             this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
-            this.MnuItmExport.Text = "Export";
+            this.MnuItmExport.Text = "Export Data";
+            this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
