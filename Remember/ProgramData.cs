@@ -12,14 +12,14 @@ namespace Remember
 
         public string Location { get; set;  }
 
-        public string Parameters { get; set;  }
+        public string Parameters { get; set; }
 
-        public long Size { get; set; }
+        public ulong Size { get; set; }
 
         [JsonIgnore]
         public Icon Icon { get; set; }
 
-        public ProgramData(string name, string fileName, string location, string parameters, long size, Icon icon)
+        public ProgramData(string name, string fileName, string location, string parameters, ulong size, Icon icon)
         {
             Name = name;
             FileName = fileName;

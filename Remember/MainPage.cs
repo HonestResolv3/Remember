@@ -31,7 +31,7 @@ namespace Remember
 
         private void BtnAddProgram_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(TxtFileInput.Text) || !File.Exists(TxtFileInput.Text))
+            if (!File.Exists(TxtFileInput.Text))
             {
                 MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -43,7 +43,7 @@ namespace Remember
             name = string.IsNullOrWhiteSpace(name) ? fInfo.Name : name;
             string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
             parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
-            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, fInfo.Length, icon);
+            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length, icon);
             LstProgramList.Items.Add(prog);
             data.Add(prog);
             string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
@@ -108,17 +108,27 @@ namespace Remember
             if (!CheckForSelection("Please select a program from the list to edit!", "Select A Program"))
                 return;
 
-            data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name;data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name;
+            data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name; 
             data.ElementAt(LstProgramList.SelectedIndex).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Location;
-            data.ElementAt(LstProgramList.SelectedIndex).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Parameters;
+            data.ElementAt(LstProgramList.SelectedIndex).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
             data.ElementAt(LstProgramList.SelectedIndex).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(LstProgramList.SelectedIndex).Location);
             FileInfo fInfo = new FileInfo(data.ElementAt(LstProgramList.SelectedIndex).Location);
-            data.ElementAt(LstProgramList.SelectedIndex).Size = fInfo.Length;
+            data.ElementAt(LstProgramList.SelectedIndex).Size = (ulong)fInfo.Length;
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(LstProgramList.SelectedIndex).Icon.Handle);
-            ReloadContents(LstProgramList.SelectedIndex);
+            ReloadContents();
         }
+
+        private void BtnDuplicate_Click(object sender, EventArgs e)
+        {
+            if (!CheckForSelection("Please select a program from the list to duplicate!", "Select A Program"))
+                return;
+
+            data.Add((ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex]);
+            ReloadContents();
+        }
+
 
         private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -139,6 +149,26 @@ namespace Remember
         private void MainPage_Load(object sender, EventArgs e)
         {
             CallLoadFile();
+        }
+
+        private void MnuItmRestart_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+        }
+
+        private void MnuItmExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MnuItmQuit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void MnuItmAbout_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This program was created by KoukoCocoa, it lets you store programs with locations and parameters, then load said programs", "About the program");
         }
 
         private bool CheckForSelection(string message, string title)
@@ -194,19 +224,6 @@ namespace Remember
             TxtSize.Clear();
         }
 
-        private void ReloadContents(int index)
-        {
-            File.WriteAllText(dataLocation, "");
-            LstProgramList.Items.Clear();
-            foreach (ProgramData prog in data)
-            {
-                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
-                File.AppendAllText(dataLocation, jsonOutput);
-                LstProgramList.Items.Add(prog);
-            }
-            LstProgramList.SelectedIndex = index;
-        }
-
         private void ReloadContents()
         {
             File.WriteAllText(dataLocation, "");
@@ -223,39 +240,38 @@ namespace Remember
          * Credit to user from StackOverflow: https://stackoverflow.com/users/553396/humbads
          * Post from site: https://www.somacon.com/p576.php
          */
-        private string GetBytesReadable(long i)
+        private string GetBytesReadable(ulong i)
         {
             // Get absolute value
-            long absolute_i = (i < 0 ? -i : i);
             // Determine the suffix and readable value
             string suffix;
             double readable;
-            if (absolute_i >= 0x1000000000000000) // Exabyte
+            if (i >= 0x1000000000000000) // Exabyte
             {
                 suffix = " EB";
                 readable = (i >> 50);
             }
-            else if (absolute_i >= 0x4000000000000) // Petabyte
+            else if (i >= 0x4000000000000) // Petabyte
             {
                 suffix = " PB";
                 readable = (i >> 40);
             }
-            else if (absolute_i >= 0x10000000000) // Terabyte
+            else if (i >= 0x10000000000) // Terabyte
             {
                 suffix = " TB";
                 readable = (i >> 30);
             }
-            else if (absolute_i >= 0x40000000) // Gigabyte
+            else if (i >= 0x40000000) // Gigabyte
             {
                 suffix = " GB";
                 readable = (i >> 20);
             }
-            else if (absolute_i >= 0x100000) // Megabyte
+            else if (i >= 0x100000) // Megabyte
             {
                 suffix = " MB";
                 readable = (i >> 10);
             }
-            else if (absolute_i >= 0x400) // Kilobyte
+            else if (i >= 0x400) // Kilobyte
             {
                 suffix = " KB";
                 readable = i;
