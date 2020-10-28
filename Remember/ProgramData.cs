@@ -8,7 +8,7 @@ namespace Remember
     {
         public string Name { get; set; }
 
-        public string FileName { get; }
+        public string FileName { get; set; }
 
         public string Location { get; set;  }
 

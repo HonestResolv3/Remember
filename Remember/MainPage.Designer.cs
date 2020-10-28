@@ -29,8 +29,8 @@ namespace Remember
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainPage));
-            this.LstProgramList = new System.Windows.Forms.ListBox();
             this.BtnLoadFile = new System.Windows.Forms.Button();
             this.TxtFileInput = new System.Windows.Forms.TextBox();
             this.BtnAddProgram = new System.Windows.Forms.Button();
@@ -56,9 +56,9 @@ namespace Remember
             this.PnlParam = new System.Windows.Forms.Panel();
             this.BtnDuplicate = new System.Windows.Forms.Button();
             this.BtnSearch = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TxtSearchInput = new System.Windows.Forms.TextBox();
             this.LblPreviewTitle = new System.Windows.Forms.Label();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.MnuStrpMainMenu = new System.Windows.Forms.MenuStrip();
             this.MnuItmMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmApplication = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmRestart = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,22 +66,16 @@ namespace Remember
             this.MnuItmExport = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnClearSearch = new System.Windows.Forms.Button();
+            this.LstVewPrograms = new System.Windows.Forms.ListView();
+            this.ImgLstIcons = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.PBoxIcon)).BeginInit();
             this.PnlLoc.SuspendLayout();
             this.PnlName.SuspendLayout();
             this.PnlFileName.SuspendLayout();
             this.PnlParam.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.MnuStrpMainMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // LstProgramList
-            // 
-            this.LstProgramList.FormattingEnabled = true;
-            this.LstProgramList.Location = new System.Drawing.Point(12, 57);
-            this.LstProgramList.Name = "LstProgramList";
-            this.LstProgramList.Size = new System.Drawing.Size(423, 251);
-            this.LstProgramList.TabIndex = 3;
-            this.LstProgramList.SelectedIndexChanged += new System.EventHandler(this.LstProgramList_SelectedIndexChanged);
             // 
             // BtnLoadFile
             // 
@@ -308,34 +302,36 @@ namespace Remember
             this.BtnSearch.TabIndex = 1;
             this.BtnSearch.Text = "Search";
             this.BtnSearch.UseVisualStyleBackColor = true;
+            this.BtnSearch.Click += new System.EventHandler(this.BtnSearch_Click);
             // 
-            // textBox1
+            // TxtSearchInput
             // 
-            this.textBox1.Location = new System.Drawing.Point(93, 29);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(342, 22);
-            this.textBox1.TabIndex = 2;
+            this.TxtSearchInput.Location = new System.Drawing.Point(93, 29);
+            this.TxtSearchInput.Name = "TxtSearchInput";
+            this.TxtSearchInput.Size = new System.Drawing.Size(261, 22);
+            this.TxtSearchInput.TabIndex = 2;
             // 
             // LblPreviewTitle
             // 
             this.LblPreviewTitle.AutoSize = true;
+            this.LblPreviewTitle.BackColor = System.Drawing.Color.Transparent;
             this.LblPreviewTitle.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LblPreviewTitle.Location = new System.Drawing.Point(595, 28);
+            this.LblPreviewTitle.Location = new System.Drawing.Point(590, 26);
             this.LblPreviewTitle.Name = "LblPreviewTitle";
             this.LblPreviewTitle.Size = new System.Drawing.Size(133, 30);
             this.LblPreviewTitle.TabIndex = 7;
             this.LblPreviewTitle.Text = "Preview Area";
             // 
-            // menuStrip1
+            // MnuStrpMainMenu
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MnuStrpMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MnuItmMenu,
             this.MnuItmAbout});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(874, 24);
-            this.menuStrip1.TabIndex = 27;
-            this.menuStrip1.Text = "MnuMainStrip";
+            this.MnuStrpMainMenu.Location = new System.Drawing.Point(0, 0);
+            this.MnuStrpMainMenu.Name = "MnuStrpMainMenu";
+            this.MnuStrpMainMenu.Size = new System.Drawing.Size(874, 24);
+            this.MnuStrpMainMenu.TabIndex = 27;
+            this.MnuStrpMainMenu.Text = "MnuMainStrip";
             // 
             // MnuItmMenu
             // 
@@ -353,34 +349,34 @@ namespace Remember
             this.MnuItmRestart,
             this.MnuItmExit});
             this.MnuItmApplication.Name = "MnuItmApplication";
-            this.MnuItmApplication.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmApplication.Size = new System.Drawing.Size(135, 22);
             this.MnuItmApplication.Text = "Application";
             // 
             // MnuItmRestart
             // 
             this.MnuItmRestart.Name = "MnuItmRestart";
-            this.MnuItmRestart.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmRestart.Size = new System.Drawing.Size(110, 22);
             this.MnuItmRestart.Text = "Restart";
             this.MnuItmRestart.Click += new System.EventHandler(this.MnuItmRestart_Click);
             // 
             // MnuItmExit
             // 
             this.MnuItmExit.Name = "MnuItmExit";
-            this.MnuItmExit.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmExit.Size = new System.Drawing.Size(110, 22);
             this.MnuItmExit.Text = "Exit";
             this.MnuItmExit.Click += new System.EventHandler(this.MnuItmExit_Click);
             // 
             // MnuItmExport
             // 
             this.MnuItmExport.Name = "MnuItmExport";
-            this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmExport.Size = new System.Drawing.Size(135, 22);
             this.MnuItmExport.Text = "Export Data";
             this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
             this.MnuItmQuit.Name = "MnuItmQuit";
-            this.MnuItmQuit.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmQuit.Size = new System.Drawing.Size(135, 22);
             this.MnuItmQuit.Text = "Quit";
             this.MnuItmQuit.Click += new System.EventHandler(this.MnuItmQuit_Click);
             // 
@@ -391,14 +387,47 @@ namespace Remember
             this.MnuItmAbout.Text = "About";
             this.MnuItmAbout.Click += new System.EventHandler(this.MnuItmAbout_Click);
             // 
+            // BtnClearSearch
+            // 
+            this.BtnClearSearch.Location = new System.Drawing.Point(360, 28);
+            this.BtnClearSearch.Name = "BtnClearSearch";
+            this.BtnClearSearch.Size = new System.Drawing.Size(75, 23);
+            this.BtnClearSearch.TabIndex = 28;
+            this.BtnClearSearch.Text = "Reset";
+            this.BtnClearSearch.UseVisualStyleBackColor = true;
+            this.BtnClearSearch.Click += new System.EventHandler(this.BtnClearSearch_Click);
+            // 
+            // LstVewPrograms
+            // 
+            this.LstVewPrograms.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.LstVewPrograms.AllowColumnReorder = true;
+            this.LstVewPrograms.FullRowSelect = true;
+            this.LstVewPrograms.HideSelection = false;
+            this.LstVewPrograms.Location = new System.Drawing.Point(12, 57);
+            this.LstVewPrograms.Name = "LstVewPrograms";
+            this.LstVewPrograms.Size = new System.Drawing.Size(422, 251);
+            this.LstVewPrograms.SmallImageList = this.ImgLstIcons;
+            this.LstVewPrograms.TabIndex = 29;
+            this.LstVewPrograms.UseCompatibleStateImageBehavior = false;
+            this.LstVewPrograms.View = System.Windows.Forms.View.List;
+            this.LstVewPrograms.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.LstVewPrograms_ItemSelectionChanged);
+            // 
+            // ImgLstIcons
+            // 
+            this.ImgLstIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ImgLstIcons.ImageSize = new System.Drawing.Size(16, 16);
+            this.ImgLstIcons.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(874, 346);
+            this.Controls.Add(this.LstVewPrograms);
+            this.Controls.Add(this.BtnClearSearch);
             this.Controls.Add(this.LblPreviewTitle);
             this.Controls.Add(this.BtnSearch);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TxtSearchInput);
             this.Controls.Add(this.BtnDuplicate);
             this.Controls.Add(this.TxtSize);
             this.Controls.Add(this.PnlFileName);
@@ -415,11 +444,10 @@ namespace Remember
             this.Controls.Add(this.BtnAddProgram);
             this.Controls.Add(this.TxtFileInput);
             this.Controls.Add(this.BtnLoadFile);
-            this.Controls.Add(this.LstProgramList);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.MnuStrpMainMenu);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.MnuStrpMainMenu;
             this.MaximumSize = new System.Drawing.Size(890, 385);
             this.MinimumSize = new System.Drawing.Size(890, 345);
             this.Name = "MainPage";
@@ -435,16 +463,14 @@ namespace Remember
             this.PnlFileName.PerformLayout();
             this.PnlParam.ResumeLayout(false);
             this.PnlParam.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.MnuStrpMainMenu.ResumeLayout(false);
+            this.MnuStrpMainMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox LstProgramList;
         private System.Windows.Forms.Button BtnLoadFile;
         private System.Windows.Forms.TextBox TxtFileInput;
         private System.Windows.Forms.Button BtnAddProgram;
@@ -470,9 +496,9 @@ namespace Remember
         private System.Windows.Forms.Button BtnLocation;
         private System.Windows.Forms.Button BtnDuplicate;
         private System.Windows.Forms.Button BtnSearch;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TxtSearchInput;
         private System.Windows.Forms.Label LblPreviewTitle;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip MnuStrpMainMenu;
         private System.Windows.Forms.ToolStripMenuItem MnuItmMenu;
         private System.Windows.Forms.ToolStripMenuItem MnuItmApplication;
         private System.Windows.Forms.ToolStripMenuItem MnuItmRestart;
@@ -480,6 +506,9 @@ namespace Remember
         private System.Windows.Forms.ToolStripMenuItem MnuItmExport;
         private System.Windows.Forms.ToolStripMenuItem MnuItmQuit;
         private System.Windows.Forms.ToolStripMenuItem MnuItmAbout;
+        private System.Windows.Forms.Button BtnClearSearch;
+        private System.Windows.Forms.ListView LstVewPrograms;
+        private System.Windows.Forms.ImageList ImgLstIcons;
     }
 }
 

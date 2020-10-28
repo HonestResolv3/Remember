@@ -15,6 +15,8 @@ namespace Remember
     public partial class MainPage : Form
     {
         List<ProgramData> data = new List<ProgramData>();
+        int search = 0;
+        readonly List<ProgramData> searchInformation = new List<ProgramData>();
         readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
         {
             Title = "Find program to store",
@@ -25,7 +27,7 @@ namespace Remember
         };
         readonly CommonOpenFileDialog folderChooserDialog = new CommonOpenFileDialog()
         {
-            Title = "Find program to store",
+            Title = "Export data to folder",
             EnsurePathExists = true,
             IsFolderPicker = true,
             RestoreDirectory = true
@@ -52,7 +54,8 @@ namespace Remember
             string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
             parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
             ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length, icon);
-            LstProgramList.Items.Add(prog);
+            ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
+            LstVewPrograms.Items.Add(prog.Name, prog.Name);
             data.Add(prog);
             string jsonOutput = $"{JsonConvert.SerializeObject(prog)}\n";
             File.AppendAllText(dataLocation, jsonOutput);
@@ -73,10 +76,10 @@ namespace Remember
 
         private void BtnLaunchProgram_Click(object sender, EventArgs e)
         {
-            if (!CheckForSelection("Please select a program from the list to launch!", "Select A Program"))
+            if (!CheckForSelection(search, "Please select a program from the list to launch!", "Select A Program"))
                 return;
 
-            ProgramData obj = (ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex];
+            ProgramData obj = data[search];
             string parameters = !obj.Parameters.Equals("None", StringComparison.OrdinalIgnoreCase) ? obj.Parameters : "";
             ProcessStartInfo procStart = new ProcessStartInfo(obj.Location, parameters)
             {
@@ -101,47 +104,74 @@ namespace Remember
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if (!CheckForSelection("Please select a program from the list to delete!", "Select A Program"))
+            if (!CheckForSelection(search, "Please select a program from the list to delete!", "Select A Program"))
                 return;
 
-            data.RemoveAt(LstProgramList.SelectedIndex);
+            data.RemoveAt(search);
             ClearContents();
             ReloadContents();
         }
 
         private void BtnEdit_Click(object sender, EventArgs e)
         {
-            if (!CheckForSelection("Please select a program from the list to edit!", "Select A Program"))
+            if (!CheckForSelection(search, "Please select a program from the list to edit!", "Select A Program"))
                 return;
 
-            data.ElementAt(LstProgramList.SelectedIndex).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Name; 
-            data.ElementAt(LstProgramList.SelectedIndex).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(LstProgramList.SelectedIndex).Location;
-            data.ElementAt(LstProgramList.SelectedIndex).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
-            data.ElementAt(LstProgramList.SelectedIndex).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(LstProgramList.SelectedIndex).Location);
-            FileInfo fInfo = new FileInfo(data.ElementAt(LstProgramList.SelectedIndex).Location);
-            data.ElementAt(LstProgramList.SelectedIndex).Size = (ulong)fInfo.Length;
+            FileInfo fInfo = new FileInfo(TxtLocationInput.Text);
+            data.ElementAt(search).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(search).Name; 
+            data.ElementAt(search).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(search).Location;
+            data.ElementAt(search).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
+            ImgLstIcons.Images.SetKeyName(search, data.ElementAt(search).Name);
+            //ImgLstIcons.Images[search] = Bitmap.FromHicon(data.ElementAt(search).Icon.Handle);
+            data.ElementAt(search).FileName = fInfo.Name;
+            data.ElementAt(search).Size = (ulong)fInfo.Length;
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
-            PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(LstProgramList.SelectedIndex).Icon.Handle);
+            PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(search).Icon.Handle);
             ReloadContents();
         }
 
         private void BtnDuplicate_Click(object sender, EventArgs e)
         {
-            if (!CheckForSelection("Please select a program from the list to duplicate!", "Select A Program"))
+            if (!CheckForSelection(search, "Please select a program from the list to duplicate!", "Select A Program"))
                 return;
 
-            data.Add((ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex]);
+            data.Add(data[search]);
             ReloadContents();
         }
 
-
-        private void LstProgramList_SelectedIndexChanged(object sender, EventArgs e)
+        private void BtnSearch_Click(object sender, EventArgs e)
         {
-            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+            searchInformation.Clear();
+            if (!string.IsNullOrWhiteSpace(TxtSearchInput.Text))
+            {
+                foreach (ProgramData prog in data)
+                {
+                    if (prog.Name.IndexOf(TxtSearchInput.Text, StringComparison.OrdinalIgnoreCase) >= 0)
+                        searchInformation.Add(prog);
+                }
+            }
+            if (searchInformation.Count > 0)
+            {
+                LstVewPrograms.Items.Clear();
+                foreach (ProgramData prog in searchInformation)
+                    LstVewPrograms.Items.Add(prog.Name, prog.Name);
+            }
+        }
+
+        private void BtnClearSearch_Click(object sender, EventArgs e)
+        {
+            LstVewPrograms.Items.Clear();
+            foreach (ProgramData prog in data)
+                LstVewPrograms.Items.Add(prog.Name, prog.Name);
+        }
+
+        private void LstVewPrograms_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (e.ItemIndex < 0 || e.ItemIndex > LstVewPrograms.Items.Count)
                 return;
 
-            ProgramData obj = (ProgramData)LstProgramList.Items[LstProgramList.SelectedIndex];
+            ProgramData obj = data[e.ItemIndex];
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(obj.Icon.Handle);
@@ -150,6 +180,7 @@ namespace Remember
             TxtLocationInput.Text = obj.Location;
             TxtParametersInput.Text = !string.IsNullOrWhiteSpace(obj.Parameters) ? obj.Parameters : "None";
             TxtSize.Text = GetBytesReadable(obj.Size);
+            search = e.ItemIndex;
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -187,9 +218,9 @@ namespace Remember
             }
         }
 
-        private bool CheckForSelection(string message, string title)
+        private bool CheckForSelection(int index, string message, string title)
         {
-            if (LstProgramList.SelectedIndex < 0 || LstProgramList.SelectedIndex > LstProgramList.Items.Count)
+            if (index < 0 || index > LstVewPrograms.Items.Count)
             {
                 MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -214,7 +245,8 @@ namespace Remember
             if (!File.Exists(dataLocation))
                 return;
 
-            LstProgramList.Items.Clear();
+            LstVewPrograms.Items.Clear();
+            ImgLstIcons.Images.Clear();
             data = File.ReadAllLines(dataLocation)
                 .Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
 
@@ -224,14 +256,15 @@ namespace Remember
                     continue;
 
                 prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
-                LstProgramList.Items.Add(prog);
+                ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
+                LstVewPrograms.Items.Add(prog.Name, prog.Name);
             }
         }
 
         private void ClearContents()
         {
             File.WriteAllText(dataLocation, "");
-            LstProgramList.Items.Clear();
+            LstVewPrograms.Items.Clear();
             TxtNameInput.Clear();
             TxtFileInput.Clear();
             TxtFileNameInput.Clear();
@@ -243,12 +276,18 @@ namespace Remember
         private void ReloadContents()
         {
             File.WriteAllText(dataLocation, "");
-            LstProgramList.Items.Clear();
+            LstVewPrograms.Items.Clear();
+            ImgLstIcons.Images.Clear();
+            int index = 0;
             foreach (ProgramData prog in data)
             {
+                if (index == search && prog.Location.Equals(TxtLocationInput.Text))
+                    prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
+                ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
                 string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
                 File.AppendAllText(dataLocation, jsonOutput);
-                LstProgramList.Items.Add(prog);
+                LstVewPrograms.Items.Add(prog.Name, prog.Name);
+                index++;
             }
         }
 
