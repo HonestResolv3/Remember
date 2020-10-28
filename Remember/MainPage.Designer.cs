@@ -82,7 +82,7 @@ namespace Remember
             this.BtnLoadFile.Location = new System.Drawing.Point(12, 315);
             this.BtnLoadFile.Name = "BtnLoadFile";
             this.BtnLoadFile.Size = new System.Drawing.Size(75, 23);
-            this.BtnLoadFile.TabIndex = 4;
+            this.BtnLoadFile.TabIndex = 5;
             this.BtnLoadFile.Text = "Load File";
             this.BtnLoadFile.UseVisualStyleBackColor = true;
             this.BtnLoadFile.Click += new System.EventHandler(this.BtnLoadFile_Click);
@@ -92,14 +92,14 @@ namespace Remember
             this.TxtFileInput.Location = new System.Drawing.Point(93, 316);
             this.TxtFileInput.Name = "TxtFileInput";
             this.TxtFileInput.Size = new System.Drawing.Size(261, 22);
-            this.TxtFileInput.TabIndex = 5;
+            this.TxtFileInput.TabIndex = 6;
             // 
             // BtnAddProgram
             // 
             this.BtnAddProgram.Location = new System.Drawing.Point(360, 315);
             this.BtnAddProgram.Name = "BtnAddProgram";
             this.BtnAddProgram.Size = new System.Drawing.Size(75, 23);
-            this.BtnAddProgram.TabIndex = 6;
+            this.BtnAddProgram.TabIndex = 7;
             this.BtnAddProgram.Text = "Confirm";
             this.BtnAddProgram.UseVisualStyleBackColor = true;
             this.BtnAddProgram.Click += new System.EventHandler(this.BtnAddProgram_Click);
@@ -110,7 +110,7 @@ namespace Remember
             this.LblName.Location = new System.Drawing.Point(1, 4);
             this.LblName.Name = "LblName";
             this.LblName.Size = new System.Drawing.Size(39, 13);
-            this.LblName.TabIndex = 10;
+            this.LblName.TabIndex = 11;
             this.LblName.Text = "Name:";
             // 
             // LblSize
@@ -119,7 +119,7 @@ namespace Remember
             this.LblSize.Location = new System.Drawing.Point(442, 279);
             this.LblSize.Name = "LblSize";
             this.LblSize.Size = new System.Drawing.Size(30, 13);
-            this.LblSize.TabIndex = 21;
+            this.LblSize.TabIndex = 22;
             this.LblSize.Text = "Size:";
             // 
             // PBoxIcon
@@ -136,7 +136,7 @@ namespace Remember
             this.LblIcon.Location = new System.Drawing.Point(442, 65);
             this.LblIcon.Name = "LblIcon";
             this.LblIcon.Size = new System.Drawing.Size(32, 13);
-            this.LblIcon.TabIndex = 8;
+            this.LblIcon.TabIndex = 9;
             this.LblIcon.Text = "Icon:";
             // 
             // BtnLaunchProgram
@@ -144,7 +144,7 @@ namespace Remember
             this.BtnLaunchProgram.Location = new System.Drawing.Point(456, 314);
             this.BtnLaunchProgram.Name = "BtnLaunchProgram";
             this.BtnLaunchProgram.Size = new System.Drawing.Size(75, 23);
-            this.BtnLaunchProgram.TabIndex = 23;
+            this.BtnLaunchProgram.TabIndex = 24;
             this.BtnLaunchProgram.Text = "Launch";
             this.BtnLaunchProgram.UseVisualStyleBackColor = true;
             this.BtnLaunchProgram.Click += new System.EventHandler(this.BtnLaunchProgram_Click);
@@ -154,7 +154,7 @@ namespace Remember
             this.BtnRefresh.Location = new System.Drawing.Point(537, 314);
             this.BtnRefresh.Name = "BtnRefresh";
             this.BtnRefresh.Size = new System.Drawing.Size(75, 23);
-            this.BtnRefresh.TabIndex = 24;
+            this.BtnRefresh.TabIndex = 25;
             this.BtnRefresh.Text = "Refresh";
             this.BtnRefresh.UseVisualStyleBackColor = true;
             this.BtnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
@@ -167,14 +167,14 @@ namespace Remember
             this.PnlLoc.Location = new System.Drawing.Point(440, 190);
             this.PnlLoc.Name = "PnlLoc";
             this.PnlLoc.Size = new System.Drawing.Size(423, 38);
-            this.PnlLoc.TabIndex = 15;
+            this.PnlLoc.TabIndex = 16;
             // 
             // BtnLocation
             // 
             this.BtnLocation.Location = new System.Drawing.Point(0, 0);
             this.BtnLocation.Name = "BtnLocation";
             this.BtnLocation.Size = new System.Drawing.Size(61, 23);
-            this.BtnLocation.TabIndex = 16;
+            this.BtnLocation.TabIndex = 17;
             this.BtnLocation.Text = "Location";
             this.BtnLocation.UseVisualStyleBackColor = true;
             this.BtnLocation.Click += new System.EventHandler(this.BtnLocation_Click);
@@ -184,7 +184,7 @@ namespace Remember
             this.TxtLocationInput.Location = new System.Drawing.Point(77, 0);
             this.TxtLocationInput.Name = "TxtLocationInput";
             this.TxtLocationInput.Size = new System.Drawing.Size(346, 22);
-            this.TxtLocationInput.TabIndex = 17;
+            this.TxtLocationInput.TabIndex = 18;
             // 
             // PnlName
             // 
@@ -194,21 +194,21 @@ namespace Remember
             this.PnlName.Location = new System.Drawing.Point(440, 102);
             this.PnlName.Name = "PnlName";
             this.PnlName.Size = new System.Drawing.Size(423, 38);
-            this.PnlName.TabIndex = 9;
+            this.PnlName.TabIndex = 10;
             // 
             // TxtNameInput
             // 
             this.TxtNameInput.Location = new System.Drawing.Point(77, 0);
             this.TxtNameInput.Name = "TxtNameInput";
             this.TxtNameInput.Size = new System.Drawing.Size(346, 22);
-            this.TxtNameInput.TabIndex = 11;
+            this.TxtNameInput.TabIndex = 12;
             // 
             // BtnEdit
             // 
             this.BtnEdit.Location = new System.Drawing.Point(699, 314);
             this.BtnEdit.Name = "BtnEdit";
             this.BtnEdit.Size = new System.Drawing.Size(75, 23);
-            this.BtnEdit.TabIndex = 26;
+            this.BtnEdit.TabIndex = 27;
             this.BtnEdit.Text = "Edit";
             this.BtnEdit.UseVisualStyleBackColor = true;
             this.BtnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
@@ -218,7 +218,7 @@ namespace Remember
             this.BtnDelete.Location = new System.Drawing.Point(618, 314);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
-            this.BtnDelete.TabIndex = 25;
+            this.BtnDelete.TabIndex = 26;
             this.BtnDelete.Text = "Delete";
             this.BtnDelete.UseVisualStyleBackColor = true;
             this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
@@ -231,7 +231,7 @@ namespace Remember
             this.PnlFileName.Location = new System.Drawing.Point(440, 146);
             this.PnlFileName.Name = "PnlFileName";
             this.PnlFileName.Size = new System.Drawing.Size(423, 38);
-            this.PnlFileName.TabIndex = 12;
+            this.PnlFileName.TabIndex = 13;
             // 
             // TxtFileNameInput
             // 
@@ -239,7 +239,7 @@ namespace Remember
             this.TxtFileNameInput.Name = "TxtFileNameInput";
             this.TxtFileNameInput.ReadOnly = true;
             this.TxtFileNameInput.Size = new System.Drawing.Size(346, 22);
-            this.TxtFileNameInput.TabIndex = 14;
+            this.TxtFileNameInput.TabIndex = 15;
             // 
             // LblFileName
             // 
@@ -247,7 +247,7 @@ namespace Remember
             this.LblFileName.Location = new System.Drawing.Point(1, 4);
             this.LblFileName.Name = "LblFileName";
             this.LblFileName.Size = new System.Drawing.Size(60, 13);
-            this.LblFileName.TabIndex = 13;
+            this.LblFileName.TabIndex = 14;
             this.LblFileName.Text = "File Name:";
             // 
             // TxtSize
@@ -256,7 +256,7 @@ namespace Remember
             this.TxtSize.Name = "TxtSize";
             this.TxtSize.ReadOnly = true;
             this.TxtSize.Size = new System.Drawing.Size(346, 22);
-            this.TxtSize.TabIndex = 22;
+            this.TxtSize.TabIndex = 23;
             // 
             // LblParameters
             // 
@@ -264,7 +264,7 @@ namespace Remember
             this.LblParameters.Location = new System.Drawing.Point(1, 4);
             this.LblParameters.Name = "LblParameters";
             this.LblParameters.Size = new System.Drawing.Size(66, 13);
-            this.LblParameters.TabIndex = 19;
+            this.LblParameters.TabIndex = 20;
             this.LblParameters.Text = "Parameters:";
             // 
             // TxtParametersInput
@@ -272,7 +272,7 @@ namespace Remember
             this.TxtParametersInput.Location = new System.Drawing.Point(77, 0);
             this.TxtParametersInput.Name = "TxtParametersInput";
             this.TxtParametersInput.Size = new System.Drawing.Size(346, 22);
-            this.TxtParametersInput.TabIndex = 20;
+            this.TxtParametersInput.TabIndex = 21;
             // 
             // PnlParam
             // 
@@ -282,14 +282,14 @@ namespace Remember
             this.PnlParam.Location = new System.Drawing.Point(440, 234);
             this.PnlParam.Name = "PnlParam";
             this.PnlParam.Size = new System.Drawing.Size(423, 38);
-            this.PnlParam.TabIndex = 18;
+            this.PnlParam.TabIndex = 19;
             // 
             // BtnDuplicate
             // 
             this.BtnDuplicate.Location = new System.Drawing.Point(780, 314);
             this.BtnDuplicate.Name = "BtnDuplicate";
             this.BtnDuplicate.Size = new System.Drawing.Size(75, 23);
-            this.BtnDuplicate.TabIndex = 27;
+            this.BtnDuplicate.TabIndex = 28;
             this.BtnDuplicate.Text = "Duplicate";
             this.BtnDuplicate.UseVisualStyleBackColor = true;
             this.BtnDuplicate.Click += new System.EventHandler(this.BtnDuplicate_Click);
@@ -319,7 +319,7 @@ namespace Remember
             this.LblPreviewTitle.Location = new System.Drawing.Point(590, 26);
             this.LblPreviewTitle.Name = "LblPreviewTitle";
             this.LblPreviewTitle.Size = new System.Drawing.Size(133, 30);
-            this.LblPreviewTitle.TabIndex = 7;
+            this.LblPreviewTitle.TabIndex = 8;
             this.LblPreviewTitle.Text = "Preview Area";
             // 
             // MnuStrpMainMenu
@@ -349,34 +349,34 @@ namespace Remember
             this.MnuItmRestart,
             this.MnuItmExit});
             this.MnuItmApplication.Name = "MnuItmApplication";
-            this.MnuItmApplication.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmApplication.Size = new System.Drawing.Size(180, 22);
             this.MnuItmApplication.Text = "Application";
             // 
             // MnuItmRestart
             // 
             this.MnuItmRestart.Name = "MnuItmRestart";
-            this.MnuItmRestart.Size = new System.Drawing.Size(110, 22);
+            this.MnuItmRestart.Size = new System.Drawing.Size(180, 22);
             this.MnuItmRestart.Text = "Restart";
             this.MnuItmRestart.Click += new System.EventHandler(this.MnuItmRestart_Click);
             // 
             // MnuItmExit
             // 
             this.MnuItmExit.Name = "MnuItmExit";
-            this.MnuItmExit.Size = new System.Drawing.Size(110, 22);
+            this.MnuItmExit.Size = new System.Drawing.Size(180, 22);
             this.MnuItmExit.Text = "Exit";
             this.MnuItmExit.Click += new System.EventHandler(this.MnuItmExit_Click);
             // 
             // MnuItmExport
             // 
             this.MnuItmExport.Name = "MnuItmExport";
-            this.MnuItmExport.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
             this.MnuItmExport.Text = "Export Data";
             this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
             this.MnuItmQuit.Name = "MnuItmQuit";
-            this.MnuItmQuit.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmQuit.Size = new System.Drawing.Size(180, 22);
             this.MnuItmQuit.Text = "Quit";
             this.MnuItmQuit.Click += new System.EventHandler(this.MnuItmQuit_Click);
             // 
@@ -392,7 +392,7 @@ namespace Remember
             this.BtnClearSearch.Location = new System.Drawing.Point(360, 28);
             this.BtnClearSearch.Name = "BtnClearSearch";
             this.BtnClearSearch.Size = new System.Drawing.Size(75, 23);
-            this.BtnClearSearch.TabIndex = 28;
+            this.BtnClearSearch.TabIndex = 3;
             this.BtnClearSearch.Text = "Reset";
             this.BtnClearSearch.UseVisualStyleBackColor = true;
             this.BtnClearSearch.Click += new System.EventHandler(this.BtnClearSearch_Click);
@@ -407,7 +407,7 @@ namespace Remember
             this.LstVewPrograms.Name = "LstVewPrograms";
             this.LstVewPrograms.Size = new System.Drawing.Size(422, 251);
             this.LstVewPrograms.SmallImageList = this.ImgLstIcons;
-            this.LstVewPrograms.TabIndex = 29;
+            this.LstVewPrograms.TabIndex = 4;
             this.LstVewPrograms.UseCompatibleStateImageBehavior = false;
             this.LstVewPrograms.View = System.Windows.Forms.View.List;
             this.LstVewPrograms.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.LstVewPrograms_ItemSelectionChanged);

@@ -19,14 +19,25 @@ namespace Remember
         [JsonIgnore]
         public Icon Icon { get; set; }
 
-        public ProgramData(string name, string fileName, string location, string parameters, ulong size, Icon icon)
+        [JsonConstructor]
+        public ProgramData(string name, string fileName, string location, string parameters, ulong size)
         {
             Name = name;
             FileName = fileName;
             Location = location;
             Parameters = parameters;
             Size = size;
-            Icon = icon;
+            Icon = Icon.ExtractAssociatedIcon(location);
+        }
+
+        public ProgramData(ProgramData prog)
+        {
+            Name = prog.Name;
+            FileName = prog.FileName;
+            Location = prog.Location;
+            Parameters = prog.Parameters;
+            Size = prog.Size;
+            Icon = Icon.ExtractAssociatedIcon(Location);
         }
 
         public override string ToString()

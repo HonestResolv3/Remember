@@ -48,12 +48,11 @@ namespace Remember
             }
 
             FileInfo fInfo = new FileInfo(TxtFileInput.Text);
-            Icon icon = Icon.ExtractAssociatedIcon(fInfo.FullName);
             string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
             name = string.IsNullOrWhiteSpace(name) ? fInfo.Name : name;
             string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
             parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
-            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length, icon);
+            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length);
             ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
             LstVewPrograms.Items.Add(prog.Name, prog.Name);
             data.Add(prog);
@@ -117,18 +116,28 @@ namespace Remember
             if (!CheckForSelection(search, "Please select a program from the list to edit!", "Select A Program"))
                 return;
 
+            if (!File.Exists(TxtLocationInput.Text))
+            {
+                MessageBox.Show("Please enter in a valid program directory!", "Program Location Edit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             FileInfo fInfo = new FileInfo(TxtLocationInput.Text);
             data.ElementAt(search).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(search).Name; 
             data.ElementAt(search).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(search).Location;
             data.ElementAt(search).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
-            ImgLstIcons.Images.SetKeyName(search, data.ElementAt(search).Name);
-            //ImgLstIcons.Images[search] = Bitmap.FromHicon(data.ElementAt(search).Icon.Handle);
+            data.ElementAt(search).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(search).Location);
             data.ElementAt(search).FileName = fInfo.Name;
             data.ElementAt(search).Size = (ulong)fInfo.Length;
+            ImgLstIcons.Images.SetKeyName(search, data.ElementAt(search).Name);
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
             PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(search).Icon.Handle);
+            ListViewItem item = LstVewPrograms.Items[search];
+            LstVewPrograms.Items.RemoveAt(search);
+            LstVewPrograms.Items.Insert(search, item);
             ReloadContents();
+            MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnDuplicate_Click(object sender, EventArgs e)
@@ -136,7 +145,9 @@ namespace Remember
             if (!CheckForSelection(search, "Please select a program from the list to duplicate!", "Select A Program"))
                 return;
 
-            data.Add(data[search]);
+            ProgramData obj = new ProgramData(data[search]);
+            obj.Icon = Icon.ExtractAssociatedIcon(obj.Location);
+            data.Add(obj);
             ReloadContents();
         }
 
@@ -278,16 +289,12 @@ namespace Remember
             File.WriteAllText(dataLocation, "");
             LstVewPrograms.Items.Clear();
             ImgLstIcons.Images.Clear();
-            int index = 0;
             foreach (ProgramData prog in data)
             {
-                if (index == search && prog.Location.Equals(TxtLocationInput.Text))
-                    prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
                 ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
                 string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
                 File.AppendAllText(dataLocation, jsonOutput);
                 LstVewPrograms.Items.Add(prog.Name, prog.Name);
-                index++;
             }
         }
 
