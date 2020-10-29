@@ -16,6 +16,7 @@ namespace Remember
     {
         List<ProgramData> data = new List<ProgramData>();
         int search = 0;
+        bool searchIsActive = false;
         readonly List<ProgramData> searchInformation = new List<ProgramData>();
         readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
         {
@@ -47,14 +48,29 @@ namespace Remember
                 return;
             }
 
-            FileInfo fInfo = new FileInfo(TxtFileInput.Text);
-            string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
-            name = string.IsNullOrWhiteSpace(name) ? fInfo.Name : name;
-            string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
-            parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
-            ProgramData prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length);
-            ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
-            LstVewPrograms.Items.Add(prog.Name, prog.Name);
+            AddElement(false);
+        }
+
+        public void AddElement(bool skipPrompts)
+        {
+            if (!File.Exists(TxtLocationInput.Text) && skipPrompts)
+            {
+                MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            FileInfo fInfo = new FileInfo(TxtLocationInput.Text);
+            ProgramData prog = new ProgramData(data[search].Name, fInfo.Name, fInfo.FullName, data[search].Parameters, (ulong)fInfo.Length);
+            if (!skipPrompts)
+            {
+                string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
+                name = string.IsNullOrWhiteSpace(name) ? fInfo.Name : name;
+                string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
+                parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
+                prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length);
+            }
+            ImgLstIcons.Images.Add(prog.UniqueName, Bitmap.FromHicon(prog.Icon.Handle));
+            LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
             data.Add(prog);
             string jsonOutput = $"{JsonConvert.SerializeObject(prog)}\n";
             File.AppendAllText(dataLocation, jsonOutput);
@@ -78,7 +94,7 @@ namespace Remember
             if (!CheckForSelection(search, "Please select a program from the list to launch!", "Select A Program"))
                 return;
 
-            ProgramData obj = data[search];
+            ProgramData obj = GetSelectedObject(search);
             string parameters = !obj.Parameters.Equals("None", StringComparison.OrdinalIgnoreCase) ? obj.Parameters : "";
             ProcessStartInfo procStart = new ProcessStartInfo(obj.Location, parameters)
             {
@@ -98,7 +114,7 @@ namespace Remember
 
         private void BtnRefresh_Click(object sender, EventArgs e)
         {
-            CallLoadFile();
+            ReloadContents(true);
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
@@ -108,7 +124,7 @@ namespace Remember
 
             data.RemoveAt(search);
             ClearContents();
-            ReloadContents();
+            ReloadContents(false);
         }
 
         private void BtnEdit_Click(object sender, EventArgs e)
@@ -123,20 +139,24 @@ namespace Remember
             }
 
             FileInfo fInfo = new FileInfo(TxtLocationInput.Text);
-            data.ElementAt(search).Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : data.ElementAt(search).Name; 
-            data.ElementAt(search).Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : data.ElementAt(search).Location;
-            data.ElementAt(search).Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
-            data.ElementAt(search).Icon = Icon.ExtractAssociatedIcon(data.ElementAt(search).Location);
-            data.ElementAt(search).FileName = fInfo.Name;
-            data.ElementAt(search).Size = (ulong)fInfo.Length;
-            ImgLstIcons.Images.SetKeyName(search, data.ElementAt(search).Name);
+            ProgramData obj = GetSelectedObject(search);
+            obj.Name = !string.IsNullOrWhiteSpace(TxtNameInput.Text) ? TxtNameInput.Text : obj.Name;
+            obj.Location = File.Exists(TxtLocationInput.Text) ? TxtLocationInput.Text : obj.Location;
+            obj.Parameters = !string.IsNullOrWhiteSpace(TxtParametersInput.Text) ? TxtParametersInput.Text : "None";
+            obj.Icon = Icon.ExtractAssociatedIcon(obj.Location);
+            obj.FileName = fInfo.Name;
+            obj.Size = (ulong)fInfo.Length;
+            ImgLstIcons.Images.RemoveAt(search);
+            ImgLstIcons.Images.Add(obj.UniqueName, obj.Icon);
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
-            PBoxIcon.Image = Bitmap.FromHicon(data.ElementAt(search).Icon.Handle);
+            PBoxIcon.Image = obj.Icon.ToBitmap();
             ListViewItem item = LstVewPrograms.Items[search];
             LstVewPrograms.Items.RemoveAt(search);
             LstVewPrograms.Items.Insert(search, item);
-            ReloadContents();
+            ReloadContents(false);
+            if (searchIsActive)
+                DoSearch();
             MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -145,36 +165,20 @@ namespace Remember
             if (!CheckForSelection(search, "Please select a program from the list to duplicate!", "Select A Program"))
                 return;
 
-            ProgramData obj = new ProgramData(data[search]);
-            obj.Icon = Icon.ExtractAssociatedIcon(obj.Location);
-            data.Add(obj);
-            ReloadContents();
+            AddElement(true);
         }
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            searchInformation.Clear();
-            if (!string.IsNullOrWhiteSpace(TxtSearchInput.Text))
-            {
-                foreach (ProgramData prog in data)
-                {
-                    if (prog.Name.IndexOf(TxtSearchInput.Text, StringComparison.OrdinalIgnoreCase) >= 0)
-                        searchInformation.Add(prog);
-                }
-            }
-            if (searchInformation.Count > 0)
-            {
-                LstVewPrograms.Items.Clear();
-                foreach (ProgramData prog in searchInformation)
-                    LstVewPrograms.Items.Add(prog.Name, prog.Name);
-            }
+            DoSearch();
         }
 
         private void BtnClearSearch_Click(object sender, EventArgs e)
         {
             LstVewPrograms.Items.Clear();
             foreach (ProgramData prog in data)
-                LstVewPrograms.Items.Add(prog.Name, prog.Name);
+                LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
+            searchIsActive = false;
         }
 
         private void LstVewPrograms_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -182,10 +186,11 @@ namespace Remember
             if (e.ItemIndex < 0 || e.ItemIndex > LstVewPrograms.Items.Count)
                 return;
 
-            ProgramData obj = data[e.ItemIndex];
+            ProgramData obj = GetSelectedObject(e.ItemIndex);
+
             if (PBoxIcon.Image != null)
                 PBoxIcon.Image.Dispose();
-            PBoxIcon.Image = Bitmap.FromHicon(obj.Icon.Handle);
+            PBoxIcon.Image = obj.Icon.ToBitmap();
             TxtNameInput.Text = obj.Name;
             TxtFileNameInput.Text = obj.FileName;
             TxtLocationInput.Text = obj.Location;
@@ -267,8 +272,8 @@ namespace Remember
                     continue;
 
                 prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
-                ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
-                LstVewPrograms.Items.Add(prog.Name, prog.Name);
+                ImgLstIcons.Images.Add(prog.UniqueName, prog.Icon);
+                LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
             }
         }
 
@@ -284,18 +289,44 @@ namespace Remember
             TxtSize.Clear();
         }
 
-        private void ReloadContents()
+        private void ReloadContents(bool skipWrite)
         {
-            File.WriteAllText(dataLocation, "");
+            if (!skipWrite)
+                File.WriteAllText(dataLocation, "");
             LstVewPrograms.Items.Clear();
             ImgLstIcons.Images.Clear();
             foreach (ProgramData prog in data)
             {
-                ImgLstIcons.Images.Add(prog.Name, Bitmap.FromHicon(prog.Icon.Handle));
-                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
-                File.AppendAllText(dataLocation, jsonOutput);
-                LstVewPrograms.Items.Add(prog.Name, prog.Name);
+                ImgLstIcons.Images.Add(prog.UniqueName, prog.Icon);
+                if (!skipWrite)
+                {
+                    string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                    File.AppendAllText(dataLocation, jsonOutput);
+                }
+                LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
             }
+        }
+
+        private void DoSearch()
+        {
+            searchInformation.Clear();
+            if (!string.IsNullOrWhiteSpace(TxtSearchInput.Text))
+            {
+                foreach (ProgramData prog in data)
+                {
+                    if (prog.Name.IndexOf(TxtSearchInput.Text, StringComparison.OrdinalIgnoreCase) >= 0)
+                        searchInformation.Add(prog);
+                }
+            }
+            if (searchInformation.Count > 0)
+            {
+                LstVewPrograms.Items.Clear();
+                foreach (ProgramData prog in searchInformation)
+                    LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
+                searchIsActive = true;
+            }
+            else
+                searchIsActive = false;
         }
 
         private void ExportInformation(string location)
@@ -307,6 +338,16 @@ namespace Remember
                 string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
                 File.AppendAllText(location, jsonOutput);
             }
+        }
+
+        private ProgramData GetSelectedObject(int index)
+        {
+            ProgramData obj;
+            if (!searchIsActive)
+                obj = data[index];
+            else
+                obj = searchInformation[index];
+            return obj;
         }
 
         /**

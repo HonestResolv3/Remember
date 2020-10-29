@@ -17,6 +17,9 @@ namespace Remember
         public ulong Size { get; set; }
 
         [JsonIgnore]
+        public string UniqueName { get; }
+
+        [JsonIgnore]
         public Icon Icon { get; set; }
 
         [JsonConstructor]
@@ -28,6 +31,7 @@ namespace Remember
             Parameters = parameters;
             Size = size;
             Icon = Icon.ExtractAssociatedIcon(location);
+            UniqueName = Name + Remember.Properties.Settings.Default.CurrentProgramIndex++;
         }
 
         public ProgramData(ProgramData prog)

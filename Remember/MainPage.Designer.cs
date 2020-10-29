@@ -141,7 +141,7 @@ namespace Remember
             // 
             // BtnLaunchProgram
             // 
-            this.BtnLaunchProgram.Location = new System.Drawing.Point(456, 314);
+            this.BtnLaunchProgram.Location = new System.Drawing.Point(499, 315);
             this.BtnLaunchProgram.Name = "BtnLaunchProgram";
             this.BtnLaunchProgram.Size = new System.Drawing.Size(75, 23);
             this.BtnLaunchProgram.TabIndex = 24;
@@ -151,12 +151,13 @@ namespace Remember
             // 
             // BtnRefresh
             // 
-            this.BtnRefresh.Location = new System.Drawing.Point(537, 314);
+            this.BtnRefresh.Location = new System.Drawing.Point(788, 34);
             this.BtnRefresh.Name = "BtnRefresh";
             this.BtnRefresh.Size = new System.Drawing.Size(75, 23);
             this.BtnRefresh.TabIndex = 25;
             this.BtnRefresh.Text = "Refresh";
             this.BtnRefresh.UseVisualStyleBackColor = true;
+            this.BtnRefresh.Visible = false;
             this.BtnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // PnlLoc
@@ -205,7 +206,7 @@ namespace Remember
             // 
             // BtnEdit
             // 
-            this.BtnEdit.Location = new System.Drawing.Point(699, 314);
+            this.BtnEdit.Location = new System.Drawing.Point(661, 315);
             this.BtnEdit.Name = "BtnEdit";
             this.BtnEdit.Size = new System.Drawing.Size(75, 23);
             this.BtnEdit.TabIndex = 27;
@@ -215,7 +216,7 @@ namespace Remember
             // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(618, 314);
+            this.BtnDelete.Location = new System.Drawing.Point(580, 315);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
             this.BtnDelete.TabIndex = 26;
@@ -286,7 +287,7 @@ namespace Remember
             // 
             // BtnDuplicate
             // 
-            this.BtnDuplicate.Location = new System.Drawing.Point(780, 314);
+            this.BtnDuplicate.Location = new System.Drawing.Point(742, 315);
             this.BtnDuplicate.Name = "BtnDuplicate";
             this.BtnDuplicate.Size = new System.Drawing.Size(75, 23);
             this.BtnDuplicate.TabIndex = 28;
@@ -349,34 +350,34 @@ namespace Remember
             this.MnuItmRestart,
             this.MnuItmExit});
             this.MnuItmApplication.Name = "MnuItmApplication";
-            this.MnuItmApplication.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmApplication.Size = new System.Drawing.Size(135, 22);
             this.MnuItmApplication.Text = "Application";
             // 
             // MnuItmRestart
             // 
             this.MnuItmRestart.Name = "MnuItmRestart";
-            this.MnuItmRestart.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmRestart.Size = new System.Drawing.Size(110, 22);
             this.MnuItmRestart.Text = "Restart";
             this.MnuItmRestart.Click += new System.EventHandler(this.MnuItmRestart_Click);
             // 
             // MnuItmExit
             // 
             this.MnuItmExit.Name = "MnuItmExit";
-            this.MnuItmExit.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmExit.Size = new System.Drawing.Size(110, 22);
             this.MnuItmExit.Text = "Exit";
             this.MnuItmExit.Click += new System.EventHandler(this.MnuItmExit_Click);
             // 
             // MnuItmExport
             // 
             this.MnuItmExport.Name = "MnuItmExport";
-            this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmExport.Size = new System.Drawing.Size(135, 22);
             this.MnuItmExport.Text = "Export Data";
             this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
             this.MnuItmQuit.Name = "MnuItmQuit";
-            this.MnuItmQuit.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmQuit.Size = new System.Drawing.Size(135, 22);
             this.MnuItmQuit.Text = "Quit";
             this.MnuItmQuit.Click += new System.EventHandler(this.MnuItmQuit_Click);
             // 
