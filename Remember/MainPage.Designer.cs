@@ -39,7 +39,6 @@ namespace Remember
             this.PBoxIcon = new System.Windows.Forms.PictureBox();
             this.LblIcon = new System.Windows.Forms.Label();
             this.BtnLaunchProgram = new System.Windows.Forms.Button();
-            this.BtnRefresh = new System.Windows.Forms.Button();
             this.PnlLoc = new System.Windows.Forms.Panel();
             this.BtnLocation = new System.Windows.Forms.Button();
             this.TxtLocationInput = new System.Windows.Forms.TextBox();
@@ -65,6 +64,8 @@ namespace Remember
             this.MnuItmExit = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmExport = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmQuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItmResizing = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnClearSearch = new System.Windows.Forms.Button();
             this.LstVewPrograms = new System.Windows.Forms.ListView();
@@ -141,24 +142,13 @@ namespace Remember
             // 
             // BtnLaunchProgram
             // 
-            this.BtnLaunchProgram.Location = new System.Drawing.Point(499, 315);
+            this.BtnLaunchProgram.Location = new System.Drawing.Point(499, 316);
             this.BtnLaunchProgram.Name = "BtnLaunchProgram";
             this.BtnLaunchProgram.Size = new System.Drawing.Size(75, 23);
             this.BtnLaunchProgram.TabIndex = 24;
             this.BtnLaunchProgram.Text = "Launch";
             this.BtnLaunchProgram.UseVisualStyleBackColor = true;
             this.BtnLaunchProgram.Click += new System.EventHandler(this.BtnLaunchProgram_Click);
-            // 
-            // BtnRefresh
-            // 
-            this.BtnRefresh.Location = new System.Drawing.Point(788, 34);
-            this.BtnRefresh.Name = "BtnRefresh";
-            this.BtnRefresh.Size = new System.Drawing.Size(75, 23);
-            this.BtnRefresh.TabIndex = 25;
-            this.BtnRefresh.Text = "Refresh";
-            this.BtnRefresh.UseVisualStyleBackColor = true;
-            this.BtnRefresh.Visible = false;
-            this.BtnRefresh.Click += new System.EventHandler(this.BtnRefresh_Click);
             // 
             // PnlLoc
             // 
@@ -206,20 +196,20 @@ namespace Remember
             // 
             // BtnEdit
             // 
-            this.BtnEdit.Location = new System.Drawing.Point(661, 315);
+            this.BtnEdit.Location = new System.Drawing.Point(580, 316);
             this.BtnEdit.Name = "BtnEdit";
             this.BtnEdit.Size = new System.Drawing.Size(75, 23);
-            this.BtnEdit.TabIndex = 27;
+            this.BtnEdit.TabIndex = 25;
             this.BtnEdit.Text = "Edit";
             this.BtnEdit.UseVisualStyleBackColor = true;
             this.BtnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
             // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(580, 315);
+            this.BtnDelete.Location = new System.Drawing.Point(742, 316);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
-            this.BtnDelete.TabIndex = 26;
+            this.BtnDelete.TabIndex = 27;
             this.BtnDelete.Text = "Delete";
             this.BtnDelete.UseVisualStyleBackColor = true;
             this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
@@ -287,10 +277,10 @@ namespace Remember
             // 
             // BtnDuplicate
             // 
-            this.BtnDuplicate.Location = new System.Drawing.Point(742, 315);
+            this.BtnDuplicate.Location = new System.Drawing.Point(661, 316);
             this.BtnDuplicate.Name = "BtnDuplicate";
             this.BtnDuplicate.Size = new System.Drawing.Size(75, 23);
-            this.BtnDuplicate.TabIndex = 28;
+            this.BtnDuplicate.TabIndex = 26;
             this.BtnDuplicate.Text = "Duplicate";
             this.BtnDuplicate.UseVisualStyleBackColor = true;
             this.BtnDuplicate.Click += new System.EventHandler(this.BtnDuplicate_Click);
@@ -327,6 +317,7 @@ namespace Remember
             // 
             this.MnuStrpMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MnuItmMenu,
+            this.settingsToolStripMenuItem,
             this.MnuItmAbout});
             this.MnuStrpMainMenu.Location = new System.Drawing.Point(0, 0);
             this.MnuStrpMainMenu.Name = "MnuStrpMainMenu";
@@ -350,7 +341,7 @@ namespace Remember
             this.MnuItmRestart,
             this.MnuItmExit});
             this.MnuItmApplication.Name = "MnuItmApplication";
-            this.MnuItmApplication.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmApplication.Size = new System.Drawing.Size(180, 22);
             this.MnuItmApplication.Text = "Application";
             // 
             // MnuItmRestart
@@ -370,16 +361,31 @@ namespace Remember
             // MnuItmExport
             // 
             this.MnuItmExport.Name = "MnuItmExport";
-            this.MnuItmExport.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
             this.MnuItmExport.Text = "Export Data";
             this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
             this.MnuItmQuit.Name = "MnuItmQuit";
-            this.MnuItmQuit.Size = new System.Drawing.Size(135, 22);
+            this.MnuItmQuit.Size = new System.Drawing.Size(180, 22);
             this.MnuItmQuit.Text = "Quit";
             this.MnuItmQuit.Click += new System.EventHandler(this.MnuItmQuit_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TStrpMnuItmResizing});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // TStrpMnuItmResizing
+            // 
+            this.TStrpMnuItmResizing.Name = "TStrpMnuItmResizing";
+            this.TStrpMnuItmResizing.Size = new System.Drawing.Size(155, 22);
+            this.TStrpMnuItmResizing.Text = "Enable Resizing";
+            this.TStrpMnuItmResizing.Click += new System.EventHandler(this.TStrpMnuItmResizing_Click);
             // 
             // MnuItmAbout
             // 
@@ -404,6 +410,7 @@ namespace Remember
             this.LstVewPrograms.AllowColumnReorder = true;
             this.LstVewPrograms.FullRowSelect = true;
             this.LstVewPrograms.HideSelection = false;
+            this.LstVewPrograms.LargeImageList = this.ImgLstIcons;
             this.LstVewPrograms.Location = new System.Drawing.Point(12, 57);
             this.LstVewPrograms.Name = "LstVewPrograms";
             this.LstVewPrograms.Size = new System.Drawing.Size(422, 251);
@@ -423,7 +430,7 @@ namespace Remember
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(874, 346);
+            this.ClientSize = new System.Drawing.Size(874, 347);
             this.Controls.Add(this.LstVewPrograms);
             this.Controls.Add(this.BtnClearSearch);
             this.Controls.Add(this.LblPreviewTitle);
@@ -437,7 +444,6 @@ namespace Remember
             this.Controls.Add(this.PnlName);
             this.Controls.Add(this.PnlParam);
             this.Controls.Add(this.PnlLoc);
-            this.Controls.Add(this.BtnRefresh);
             this.Controls.Add(this.BtnLaunchProgram);
             this.Controls.Add(this.LblIcon);
             this.Controls.Add(this.PBoxIcon);
@@ -447,10 +453,12 @@ namespace Remember
             this.Controls.Add(this.BtnLoadFile);
             this.Controls.Add(this.MnuStrpMainMenu);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MnuStrpMainMenu;
-            this.MaximumSize = new System.Drawing.Size(890, 385);
-            this.MinimumSize = new System.Drawing.Size(890, 345);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(890, 386);
+            this.MinimumSize = new System.Drawing.Size(890, 386);
             this.Name = "MainPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Remember";
@@ -480,7 +488,6 @@ namespace Remember
         private System.Windows.Forms.PictureBox PBoxIcon;
         private System.Windows.Forms.Label LblIcon;
         private System.Windows.Forms.Button BtnLaunchProgram;
-        private System.Windows.Forms.Button BtnRefresh;
         private System.Windows.Forms.Panel PnlLoc;
         private System.Windows.Forms.Panel PnlName;
         private System.Windows.Forms.Button BtnEdit;
@@ -510,6 +517,8 @@ namespace Remember
         private System.Windows.Forms.Button BtnClearSearch;
         private System.Windows.Forms.ListView LstVewPrograms;
         private System.Windows.Forms.ImageList ImgLstIcons;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmResizing;
     }
 }
 

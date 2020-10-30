@@ -17,6 +17,7 @@ namespace Remember
         List<ProgramData> data = new List<ProgramData>();
         int search = 0;
         bool searchIsActive = false;
+        readonly Resizer ResizeObj;
         readonly List<ProgramData> searchInformation = new List<ProgramData>();
         readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
         {
@@ -38,6 +39,19 @@ namespace Remember
         public MainPage()
         {
             InitializeComponent();
+            ResizeObj = new Resizer(this);
+            Load += ResizerLoad;
+            Resize += ResizerResize;
+        }
+
+        private void ResizerLoad(object sender, EventArgs e)
+        {
+            ResizeObj.GetInitialSize();
+        }
+
+        private void ResizerResize(object sender, EventArgs e)
+        {
+            ResizeObj.Resize();
         }
 
         private void BtnAddProgram_Click(object sender, EventArgs e)
@@ -112,19 +126,20 @@ namespace Remember
             
         }
 
-        private void BtnRefresh_Click(object sender, EventArgs e)
-        {
-            ReloadContents(true);
-        }
-
         private void BtnDelete_Click(object sender, EventArgs e)
         {
             if (!CheckForSelection(search, "Please select a program from the list to delete!", "Select A Program"))
                 return;
 
-            data.RemoveAt(search);
-            ClearContents();
-            ReloadContents(false);
+            string choice = Interaction.InputBox($"Confirm deleting the entry at location {search + 1}?" +
+                "\n\nType Y to continue, anything else to exit" +
+                "\n\nPress X or Cancel to exit as well)", "Delete Entry?");
+            if (choice.Equals("Y", StringComparison.OrdinalIgnoreCase))
+            {
+                data.RemoveAt(search);
+                ClearContents();
+                ReloadContents(false);
+            }
         }
 
         private void BtnEdit_Click(object sender, EventArgs e)
@@ -234,9 +249,32 @@ namespace Remember
             }
         }
 
+        private void TStrpMnuItmResizing_Click(object sender, EventArgs e)
+        {
+            CheckForResizeSelection();
+        }
+
+        private void CheckForResizeSelection()
+        {
+            if (!TStrpMnuItmResizing.Checked)
+            {
+                TStrpMnuItmResizing.Checked = true;
+                FormBorderStyle = FormBorderStyle.Sizable;
+                MaximizeBox = true;
+                MaximumSize = new Size(0, 0);
+            }
+            else
+            {
+                TStrpMnuItmResizing.Checked = false;
+                FormBorderStyle = FormBorderStyle.FixedSingle;
+                MaximizeBox = false;
+                MaximumSize = new Size(890, 386);
+            }
+        }
+
         private bool CheckForSelection(int index, string message, string title)
         {
-            if (index < 0 || index > LstVewPrograms.Items.Count)
+            if (index < 0 || index >= LstVewPrograms.Items.Count)
             {
                 MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -351,7 +389,7 @@ namespace Remember
         }
 
         /**
-         * Credit to user from StackOverflow: https://stackoverflow.com/users/553396/humbads
+         * Credit to this user from StackOverflow: https://stackoverflow.com/users/553396/humbads
          * Post from site: https://www.somacon.com/p576.php
          */
         private string GetBytesReadable(ulong i)
