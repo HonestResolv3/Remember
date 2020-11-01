@@ -17,7 +17,8 @@ namespace Remember
         List<ProgramData> data = new List<ProgramData>();
         int search = 0;
         bool searchIsActive = false;
-        readonly Resizer ResizeObj;
+        public static string Dir = Path.GetTempPath() + "\\Remember_Backups\\";
+        readonly Resizer resizeObj;
         readonly List<ProgramData> searchInformation = new List<ProgramData>();
         readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
         {
@@ -39,19 +40,21 @@ namespace Remember
         public MainPage()
         {
             InitializeComponent();
-            ResizeObj = new Resizer(this);
+            if (!Directory.Exists(Dir))
+                Directory.CreateDirectory(Dir);
+            resizeObj = new Resizer(this);
             Load += ResizerLoad;
             Resize += ResizerResize;
         }
 
         private void ResizerLoad(object sender, EventArgs e)
         {
-            ResizeObj.GetInitialSize();
+            resizeObj.GetInitialSize();
         }
 
         private void ResizerResize(object sender, EventArgs e)
         {
-            ResizeObj.Resize();
+            resizeObj.Resize();
         }
 
         private void BtnAddProgram_Click(object sender, EventArgs e)
@@ -133,12 +136,14 @@ namespace Remember
 
             string choice = Interaction.InputBox($"Confirm deleting the entry at location {search + 1}?" +
                 "\n\nType Y to continue, anything else to exit" +
-                "\n\nPress X or Cancel to exit as well)", "Delete Entry?");
+                "\n\nPress X or Cancel to exit as well", "Delete Entry?");
             if (choice.Equals("Y", StringComparison.OrdinalIgnoreCase))
             {
                 data.RemoveAt(search);
                 ClearContents();
                 ReloadContents(false);
+                if (!TStrpMnuItmDisableMsg.Checked)
+                    MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -216,7 +221,7 @@ namespace Remember
 
         private void MainPage_Load(object sender, EventArgs e)
         {
-            CallLoadFile();
+            CallDefaultLoadFile();
         }
 
         private void MnuItmRestart_Click(object sender, EventArgs e)
@@ -254,6 +259,45 @@ namespace Remember
             CheckForResizeSelection();
         }
 
+        private void TStrpMnuItmDisableMsg_Click(object sender, EventArgs e)
+        {
+            if (!TStrpMnuItmDisableMsg.Checked)
+                TStrpMnuItmDisableMsg.Checked = true;
+            else
+                TStrpMnuItmDisableMsg.Checked = false;
+        }
+
+
+        private void TStrpMnuItmBackupUI_Click(object sender, EventArgs e)
+        {
+            if (!Remember.BackupManager.IsActive)
+            {
+                BackupManager manager = new BackupManager(this);
+                manager.ShowDialog();
+            }
+        }
+
+
+        private void TStrpMnuItm15Timer_Click(object sender, EventArgs e)
+        {
+            ChangeTimerSelection(0);
+        }
+
+        private void TStrpMnuItm30Timer_Click(object sender, EventArgs e)
+        {
+            ChangeTimerSelection(1);
+        }
+
+        private void TStrpMnuItm60Timer_Click(object sender, EventArgs e)
+        {
+            ChangeTimerSelection(2);
+        }
+
+        private void TStrpMnuItmCustomTimer_Click(object sender, EventArgs e)
+        {
+            ChangeTimerSelection(3);
+        }
+
         private void CheckForResizeSelection()
         {
             if (!TStrpMnuItmResizing.Checked)
@@ -282,11 +326,11 @@ namespace Remember
             return true;
         }
 
-        private void CallLoadFile()
+        private void CallDefaultLoadFile()
         {
             try
             {
-                LoadFile();
+                LoadDefaultFile();
             }
             catch (Exception)
             {
@@ -294,10 +338,31 @@ namespace Remember
             }
         }
 
-        private void LoadFile()
+        private void LoadDefaultFile()
         {
             if (!File.Exists(dataLocation))
                 return;
+
+            LstVewPrograms.Items.Clear();
+            ImgLstIcons.Images.Clear();
+            data = File.ReadAllLines(dataLocation)
+                .Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
+
+            foreach (ProgramData prog in data)
+            {
+                if (prog == null)
+                    continue;
+
+                prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
+                ImgLstIcons.Images.Add(prog.UniqueName, prog.Icon);
+                LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
+            }
+        }
+
+        private void LoadTempFile()
+        {
+            //if (!File.Exists())
+                //return;
 
             LstVewPrograms.Items.Clear();
             ImgLstIcons.Images.Clear();
@@ -325,6 +390,63 @@ namespace Remember
             TxtLocationInput.Clear();
             TxtParametersInput.Clear();
             TxtSize.Clear();
+        }
+
+        private void ChangeTimerSelection(int value)
+        {
+            switch (value)
+            {
+                case 0:
+                    TStrpMnuItm15Timer.Checked = true;
+                    TStrpMnuItm30Timer.Checked = false;
+                    TStrpMnuItm60Timer.Checked = false;
+                    TStrpMnuItmCustomTimer.Checked = false;
+                    TmrSaveData.Interval = 900000;
+                    break;
+                case 1:
+                    TStrpMnuItm15Timer.Checked = false;
+                    TStrpMnuItm30Timer.Checked = true;
+                    TStrpMnuItm60Timer.Checked = false;
+                    TStrpMnuItmCustomTimer.Checked = false;
+                    TmrSaveData.Interval = 1800000;
+                    break;
+                case 2:
+                    TStrpMnuItm15Timer.Checked = false;
+                    TStrpMnuItm30Timer.Checked = false;
+                    TStrpMnuItm60Timer.Checked = true;
+                    TStrpMnuItmCustomTimer.Checked = false;
+                    TmrSaveData.Interval = 3600000;
+                    break;
+                case 3:
+                    string timerInput = Interaction.InputBox("Enter the time interval backups are saved at" +
+                        "\n\nEnter the time in minutes (I.e.: 20, 75, 120, etc.)" +
+                        "\n\nNOTE: Lower times = more CPU usage", "Enter Custom Timer");
+                    if (!int.TryParse(timerInput, out int TimerValue))
+                    {
+                        MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    try
+                    {
+                        TmrSaveData.Interval = TimerValue * 60000;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("An error occured when trying to add the custom timer", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    MessageBox.Show($"The backup save timer is now set to run every {TimerValue} minutes", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    TStrpMnuItm15Timer.Checked = false;
+                    TStrpMnuItm30Timer.Checked = false;
+                    TStrpMnuItm60Timer.Checked = false;
+                    TStrpMnuItmCustomTimer.Checked = true;
+                    break;
+            }
         }
 
         private void ReloadContents(bool skipWrite)

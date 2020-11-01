@@ -16,10 +16,7 @@ public class Resizer
     {
         Form = form; //the calling form
         FormSize = form.ClientSize; //Save initial form size
-        Fontsize = form.Font.Size; //Font size
     }
-
-    private float Fontsize { get; set; }
 
     private System.Drawing.SizeF FormSize { get; set; }
 

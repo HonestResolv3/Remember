@@ -66,10 +66,19 @@ namespace Remember
             this.MnuItmQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TStrpMnuItmResizing = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItmDisableMsg = new System.Windows.Forms.ToolStripMenuItem();
+            this.MnuItmBackup = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItmBackupUI = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnClearSearch = new System.Windows.Forms.Button();
             this.LstVewPrograms = new System.Windows.Forms.ListView();
             this.ImgLstIcons = new System.Windows.Forms.ImageList(this.components);
+            this.TmrSaveData = new System.Windows.Forms.Timer(this.components);
+            this.TStrpMnuItmSetTimer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItm15Timer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItm30Timer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItm60Timer = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItmCustomTimer = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PBoxIcon)).BeginInit();
             this.PnlLoc.SuspendLayout();
             this.PnlName.SuspendLayout();
@@ -318,6 +327,7 @@ namespace Remember
             this.MnuStrpMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.MnuItmMenu,
             this.settingsToolStripMenuItem,
+            this.MnuItmBackup,
             this.MnuItmAbout});
             this.MnuStrpMainMenu.Location = new System.Drawing.Point(0, 0);
             this.MnuStrpMainMenu.Name = "MnuStrpMainMenu";
@@ -341,7 +351,7 @@ namespace Remember
             this.MnuItmRestart,
             this.MnuItmExit});
             this.MnuItmApplication.Name = "MnuItmApplication";
-            this.MnuItmApplication.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmApplication.Size = new System.Drawing.Size(135, 22);
             this.MnuItmApplication.Text = "Application";
             // 
             // MnuItmRestart
@@ -361,21 +371,23 @@ namespace Remember
             // MnuItmExport
             // 
             this.MnuItmExport.Name = "MnuItmExport";
-            this.MnuItmExport.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmExport.Size = new System.Drawing.Size(135, 22);
             this.MnuItmExport.Text = "Export Data";
             this.MnuItmExport.Click += new System.EventHandler(this.MnuItmExport_Click);
             // 
             // MnuItmQuit
             // 
             this.MnuItmQuit.Name = "MnuItmQuit";
-            this.MnuItmQuit.Size = new System.Drawing.Size(180, 22);
+            this.MnuItmQuit.Size = new System.Drawing.Size(135, 22);
             this.MnuItmQuit.Text = "Quit";
             this.MnuItmQuit.Click += new System.EventHandler(this.MnuItmQuit_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TStrpMnuItmResizing});
+            this.TStrpMnuItmDisableMsg,
+            this.TStrpMnuItmResizing,
+            this.TStrpMnuItmSetTimer});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -383,9 +395,31 @@ namespace Remember
             // TStrpMnuItmResizing
             // 
             this.TStrpMnuItmResizing.Name = "TStrpMnuItmResizing";
-            this.TStrpMnuItmResizing.Size = new System.Drawing.Size(155, 22);
+            this.TStrpMnuItmResizing.Size = new System.Drawing.Size(192, 22);
             this.TStrpMnuItmResizing.Text = "Enable Resizing";
             this.TStrpMnuItmResizing.Click += new System.EventHandler(this.TStrpMnuItmResizing_Click);
+            // 
+            // TStrpMnuItmDisableMsg
+            // 
+            this.TStrpMnuItmDisableMsg.Name = "TStrpMnuItmDisableMsg";
+            this.TStrpMnuItmDisableMsg.Size = new System.Drawing.Size(192, 22);
+            this.TStrpMnuItmDisableMsg.Text = "Disable Messages";
+            this.TStrpMnuItmDisableMsg.Click += new System.EventHandler(this.TStrpMnuItmDisableMsg_Click);
+            // 
+            // MnuItmBackup
+            // 
+            this.MnuItmBackup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TStrpMnuItmBackupUI});
+            this.MnuItmBackup.Name = "MnuItmBackup";
+            this.MnuItmBackup.Size = new System.Drawing.Size(58, 20);
+            this.MnuItmBackup.Text = "Backup";
+            // 
+            // TStrpMnuItmBackupUI
+            // 
+            this.TStrpMnuItmBackupUI.Name = "TStrpMnuItmBackupUI";
+            this.TStrpMnuItmBackupUI.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItmBackupUI.Text = "Load Backup UI";
+            this.TStrpMnuItmBackupUI.Click += new System.EventHandler(this.TStrpMnuItmBackupUI_Click);
             // 
             // MnuItmAbout
             // 
@@ -425,6 +459,49 @@ namespace Remember
             this.ImgLstIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.ImgLstIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.ImgLstIcons.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // TmrSaveData
+            // 
+            this.TmrSaveData.Interval = 15000;
+            // 
+            // TStrpMnuItmSetTimer
+            // 
+            this.TStrpMnuItmSetTimer.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.TStrpMnuItm15Timer,
+            this.TStrpMnuItm30Timer,
+            this.TStrpMnuItm60Timer,
+            this.TStrpMnuItmCustomTimer});
+            this.TStrpMnuItmSetTimer.Name = "TStrpMnuItmSetTimer";
+            this.TStrpMnuItmSetTimer.Size = new System.Drawing.Size(192, 22);
+            this.TStrpMnuItmSetTimer.Text = "Set Backup Save Timer";
+            // 
+            // TStrpMnuItm15Timer
+            // 
+            this.TStrpMnuItm15Timer.Name = "TStrpMnuItm15Timer";
+            this.TStrpMnuItm15Timer.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItm15Timer.Text = "15 Minutes";
+            this.TStrpMnuItm15Timer.Click += new System.EventHandler(this.TStrpMnuItm15Timer_Click);
+            // 
+            // TStrpMnuItm30Timer
+            // 
+            this.TStrpMnuItm30Timer.Name = "TStrpMnuItm30Timer";
+            this.TStrpMnuItm30Timer.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItm30Timer.Text = "30 Minutes";
+            this.TStrpMnuItm30Timer.Click += new System.EventHandler(this.TStrpMnuItm30Timer_Click);
+            // 
+            // TStrpMnuItm60Timer
+            // 
+            this.TStrpMnuItm60Timer.Name = "TStrpMnuItm60Timer";
+            this.TStrpMnuItm60Timer.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItm60Timer.Text = "60 Minutes";
+            this.TStrpMnuItm60Timer.Click += new System.EventHandler(this.TStrpMnuItm60Timer_Click);
+            // 
+            // TStrpMnuItmCustomTimer
+            // 
+            this.TStrpMnuItmCustomTimer.Name = "TStrpMnuItmCustomTimer";
+            this.TStrpMnuItmCustomTimer.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItmCustomTimer.Text = "Custom";
+            this.TStrpMnuItmCustomTimer.Click += new System.EventHandler(this.TStrpMnuItmCustomTimer_Click);
             // 
             // MainPage
             // 
@@ -518,7 +595,16 @@ namespace Remember
         private System.Windows.Forms.ListView LstVewPrograms;
         private System.Windows.Forms.ImageList ImgLstIcons;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmResizing;
+        private System.Windows.Forms.ToolStripMenuItem MnuItmBackup;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmBackupUI;
+        public System.Windows.Forms.ToolStripMenuItem TStrpMnuItmResizing;
+        public System.Windows.Forms.ToolStripMenuItem TStrpMnuItmDisableMsg;
+        private System.Windows.Forms.Timer TmrSaveData;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmSetTimer;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItm15Timer;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItm30Timer;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItm60Timer;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmCustomTimer;
     }
 }
 
