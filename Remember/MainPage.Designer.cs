@@ -463,6 +463,7 @@ namespace Remember
             // TmrSaveData
             // 
             this.TmrSaveData.Interval = 15000;
+            this.TmrSaveData.Tick += new System.EventHandler(this.TmrSaveData_Tick);
             // 
             // TStrpMnuItmSetTimer
             // 

@@ -34,5 +34,17 @@ namespace Remember.Properties {
                 this["CurrentProgramIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CurrentBackupCount {
+            get {
+                return ((int)(this["CurrentBackupCount"]));
+            }
+            set {
+                this["CurrentBackupCount"] = value;
+            }
+        }
     }
 }

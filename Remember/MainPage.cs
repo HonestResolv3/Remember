@@ -17,7 +17,8 @@ namespace Remember
         List<ProgramData> data = new List<ProgramData>();
         int search = 0;
         bool searchIsActive = false;
-        public static string Dir = Path.GetTempPath() + "\\Remember_Backups\\";
+        public static string Dir = Path.Combine(Path.GetTempPath(), "Remember_Backups");
+        readonly string dataLocation = Path.Combine(Assembly.GetExecutingAssembly().Location.Substring(0, Assembly.GetExecutingAssembly().Location.LastIndexOf("\\")), "programdata.json");
         readonly Resizer resizeObj;
         readonly List<ProgramData> searchInformation = new List<ProgramData>();
         readonly CommonOpenFileDialog fileChooserDialog = new CommonOpenFileDialog()
@@ -35,13 +36,14 @@ namespace Remember
             IsFolderPicker = true,
             RestoreDirectory = true
         };
-        readonly string dataLocation = Assembly.GetExecutingAssembly().Location.Substring(0, Assembly.GetExecutingAssembly().Location.LastIndexOf("\\")) + "\\programdata.json";
 
         public MainPage()
         {
             InitializeComponent();
             if (!Directory.Exists(Dir))
                 Directory.CreateDirectory(Dir);
+            ChangeTimerSelection(0);
+            TmrSaveData.Start();
             resizeObj = new Resizer(this);
             Load += ResizerLoad;
             Resize += ResizerResize;
@@ -61,7 +63,7 @@ namespace Remember
         {
             if (!File.Exists(TxtFileInput.Text))
             {
-                MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -72,7 +74,7 @@ namespace Remember
         {
             if (!File.Exists(TxtLocationInput.Text) && skipPrompts)
             {
-                MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show("Please enter a valid program path!", "Program Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -91,7 +93,7 @@ namespace Remember
             data.Add(prog);
             string jsonOutput = $"{JsonConvert.SerializeObject(prog)}\n";
             File.AppendAllText(dataLocation, jsonOutput);
-            MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _ = MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnLoadFile_Click(object sender, EventArgs e)
@@ -124,7 +126,7 @@ namespace Remember
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("You do not have an application associated with this file!", "Program Start Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show("You do not have an application associated with this file!", "Program Start Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }
@@ -143,7 +145,7 @@ namespace Remember
                 ClearContents();
                 ReloadContents(false);
                 if (!TStrpMnuItmDisableMsg.Checked)
-                    MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _ = MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -154,7 +156,7 @@ namespace Remember
 
             if (!File.Exists(TxtLocationInput.Text))
             {
-                MessageBox.Show("Please enter in a valid program directory!", "Program Location Edit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show("Please enter in a valid program directory!", "Program Location Edit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -177,7 +179,7 @@ namespace Remember
             ReloadContents(false);
             if (searchIsActive)
                 DoSearch();
-            MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _ = MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnDuplicate_Click(object sender, EventArgs e)
@@ -241,7 +243,7 @@ namespace Remember
 
         private void MnuItmAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This program was created by KoukoCocoa, it lets you store programs with locations and parameters, then load said programs", "About the program");
+            _ = MessageBox.Show("This program was created by KoukoCocoa, it lets you store programs with locations and parameters, then load said programs", "About the program");
         }
 
         private void MnuItmExport_Click(object sender, EventArgs e)
@@ -250,7 +252,7 @@ namespace Remember
             {
                 string location = $"{folderChooserDialog.FileName}\\export.json";
                 ExportInformation(location);
-                MessageBox.Show($"The data has now been exported to {location}!", "Data Exported Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _ = MessageBox.Show($"The data has now been exported to {location}!", "Data Exported Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -270,7 +272,7 @@ namespace Remember
 
         private void TStrpMnuItmBackupUI_Click(object sender, EventArgs e)
         {
-            if (!Remember.BackupManager.IsActive)
+            if (!BackupManager.IsActive)
             {
                 BackupManager manager = new BackupManager(this);
                 manager.ShowDialog();
@@ -298,6 +300,22 @@ namespace Remember
             ChangeTimerSelection(3);
         }
 
+        private void TmrSaveData_Tick(object sender, EventArgs e)
+        {
+            if (File.Exists(dataLocation))
+            {
+                try
+                {
+                    File.Copy(dataLocation, Path.Combine(Dir, "programdata.json"));
+                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{++Remember.Properties.Settings.Default.CurrentBackupCount}.json"));
+                }
+                catch (IOException)
+                {
+                    // If the file already exists, do not do anything, I will make a label telling the user there's an error as well if they modify the files
+                }
+            }
+        }
+
         private void CheckForResizeSelection()
         {
             if (!TStrpMnuItmResizing.Checked)
@@ -320,7 +338,7 @@ namespace Remember
         {
             if (index < 0 || index >= LstVewPrograms.Items.Count)
             {
-                MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;
@@ -421,26 +439,26 @@ namespace Remember
                     string timerInput = Interaction.InputBox("Enter the time interval backups are saved at" +
                         "\n\nEnter the time in minutes (I.e.: 20, 75, 120, etc.)" +
                         "\n\nNOTE: Lower times = more CPU usage", "Enter Custom Timer");
-                    if (!int.TryParse(timerInput, out int TimerValue))
+                    if (!double.TryParse(timerInput, out double TimerValue) && TimerValue > 0)
                     {
-                        MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _ = MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     try
                     {
-                        TmrSaveData.Interval = TimerValue * 60000;
+                        TmrSaveData.Interval = (int) (TimerValue * 60000);
                     }
                     catch (ArgumentOutOfRangeException)
                     {
-                        MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _ = MessageBox.Show("Please enter in a valid number for the timer!", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("An error occured when trying to add the custom timer", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        _ = MessageBox.Show("An error occured when trying to add the custom timer", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    MessageBox.Show($"The backup save timer is now set to run every {TimerValue} minutes", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _ = MessageBox.Show($"The backup save timer is now set to run every {TimerValue} minutes", "Timer Set Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TStrpMnuItm15Timer.Checked = false;
                     TStrpMnuItm30Timer.Checked = false;
                     TStrpMnuItm60Timer.Checked = false;
