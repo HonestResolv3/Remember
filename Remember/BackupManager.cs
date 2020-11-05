@@ -8,7 +8,8 @@ namespace Remember
 {
     public partial class BackupManager : Form
     {
-        string[] files = Directory.GetFiles(MainPage.Dir, "*.json");
+        int searchIndex = -1;
+        string[] files;
         readonly List<BackupData> dataEntries = new List<BackupData>();
         readonly MainPage mainRef;
         public static bool IsActive = false;
@@ -25,14 +26,9 @@ namespace Remember
 
         }
 
-        private void BtnEdit_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if (LstBackupItems.SelectedIndex < 0 || LstBackupItems.SelectedIndex > LstBackupItems.Items.Count)
+            if (searchIndex < 0 || searchIndex > LstBackupItems.Items.Count)
             {
                 _ = MessageBox.Show("Please select a valid entry from the list!", "Backup Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -43,7 +39,11 @@ namespace Remember
                 "\n\nPress X or Cancel to exit as well", "Delete Entry?");
             if (choice.Equals("Y", StringComparison.OrdinalIgnoreCase))
             {
-                LstBackupItems.Items.RemoveAt(LstBackupItems.SelectedIndex);
+                LoadBackups();
+                LstBackupItems.Items.RemoveAt(searchIndex);
+                BackupData data = dataEntries[searchIndex];
+                File.Delete(data.Location);
+                dataEntries.RemoveAt(searchIndex);
                 if (!mainRef.TStrpMnuItmDisableMsg.Checked)
                     _ = MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -54,8 +54,15 @@ namespace Remember
             IsActive = false;
         }
 
+        private void LstBackupItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            searchIndex = LstBackupItems.SelectedIndex;
+        }
+
         private void LoadBackups()
         {
+            LstBackupItems.Items.Clear();
+            files = Directory.GetFiles(MainPage.Dir, "*.json");
             if (files.Length > 0)
             {
                 foreach (string file in files)

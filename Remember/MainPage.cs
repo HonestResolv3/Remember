@@ -314,14 +314,14 @@ namespace Remember
             {
                 try
                 {
-                    if (File.Exists(Path.Combine(Dir, $"backup{Remember.Properties.Settings.Default.CurrentBackupCount}.json")))
+                    if (File.Exists(Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json")))
                     {
                         Remember.Properties.Settings.Default.CurrentBackupCount++;
                         return;
                     }
 
                     File.Copy(dataLocation, Path.Combine(Dir, "programdata.json"));
-                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{Remember.Properties.Settings.Default.CurrentBackupCount}.json"));
+                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json"));
                 }
                 catch (IOException)
                 {

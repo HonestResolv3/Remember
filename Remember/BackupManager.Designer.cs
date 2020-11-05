@@ -32,7 +32,6 @@ namespace Remember
             this.LblBackupTitle = new System.Windows.Forms.Label();
             this.LstBackupItems = new System.Windows.Forms.ListBox();
             this.BtnLoad = new System.Windows.Forms.Button();
-            this.BtnEdit = new System.Windows.Forms.Button();
             this.BtnDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -54,10 +53,11 @@ namespace Remember
             this.LstBackupItems.Name = "LstBackupItems";
             this.LstBackupItems.Size = new System.Drawing.Size(454, 277);
             this.LstBackupItems.TabIndex = 10;
+            this.LstBackupItems.SelectedIndexChanged += new System.EventHandler(this.LstBackupItems_SelectedIndexChanged);
             // 
             // BtnLoad
             // 
-            this.BtnLoad.Location = new System.Drawing.Point(97, 328);
+            this.BtnLoad.Location = new System.Drawing.Point(161, 328);
             this.BtnLoad.Name = "BtnLoad";
             this.BtnLoad.Size = new System.Drawing.Size(75, 23);
             this.BtnLoad.TabIndex = 11;
@@ -65,19 +65,9 @@ namespace Remember
             this.BtnLoad.UseVisualStyleBackColor = true;
             this.BtnLoad.Click += new System.EventHandler(this.BtnLoad_Click);
             // 
-            // BtnEdit
-            // 
-            this.BtnEdit.Location = new System.Drawing.Point(203, 328);
-            this.BtnEdit.Name = "BtnEdit";
-            this.BtnEdit.Size = new System.Drawing.Size(75, 23);
-            this.BtnEdit.TabIndex = 12;
-            this.BtnEdit.Text = "Edit";
-            this.BtnEdit.UseVisualStyleBackColor = true;
-            this.BtnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
-            // 
             // BtnDelete
             // 
-            this.BtnDelete.Location = new System.Drawing.Point(307, 328);
+            this.BtnDelete.Location = new System.Drawing.Point(252, 328);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
             this.BtnDelete.TabIndex = 13;
@@ -91,7 +81,6 @@ namespace Remember
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 360);
             this.Controls.Add(this.BtnDelete);
-            this.Controls.Add(this.BtnEdit);
             this.Controls.Add(this.BtnLoad);
             this.Controls.Add(this.LstBackupItems);
             this.Controls.Add(this.LblBackupTitle);
@@ -109,7 +98,6 @@ namespace Remember
         private System.Windows.Forms.Label LblBackupTitle;
         private System.Windows.Forms.ListBox LstBackupItems;
         private System.Windows.Forms.Button BtnLoad;
-        private System.Windows.Forms.Button BtnEdit;
         private System.Windows.Forms.Button BtnDelete;
     }
 }

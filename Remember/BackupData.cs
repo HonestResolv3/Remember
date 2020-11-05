@@ -15,7 +15,7 @@ namespace Remember
         public BackupData(string name, string location)
         {
             Name = name;
-            Location = Location;
+            Location = location;
         }
 
         public override string ToString()
