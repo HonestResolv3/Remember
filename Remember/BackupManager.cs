@@ -12,6 +12,7 @@ namespace Remember
         string[] files;
         readonly List<BackupData> dataEntries = new List<BackupData>();
         readonly MainPage mainRef;
+        readonly Resizer resizeObj;
         public static bool IsActive = false;
         public BackupManager(MainPage page)
         {
@@ -19,20 +20,45 @@ namespace Remember
             LoadBackups();
             mainRef = page;
             IsActive = true;
+            if (mainRef.TStrpMnuItmResizing.Checked)
+            {
+                resizeObj = new Resizer(this);
+                Load += ResizerLoad;
+                Resize += ResizerResize;
+            }
+        }
+
+        private void ResizerLoad(object sender, EventArgs e)
+        {
+            resizeObj.GetInitialSize();
+        }
+
+        private void ResizerResize(object sender, EventArgs e)
+        {
+            resizeObj.Resize();
         }
 
         private void BtnLoad_Click(object sender, EventArgs e)
         {
+            if (!CheckForSelection(searchIndex))
+                return;
 
+            string choice = Interaction.InputBox($"Confirm loading the entry at location {LstBackupItems.SelectedIndex + 1}?" +
+                "\n\nType Y to continue, anything else to exit" +
+                "\n\nPress X or Cancel to exit as well", "Load Entry?");
+            if (choice.Equals("Y", StringComparison.OrdinalIgnoreCase))
+            {
+                BackupData data = dataEntries[searchIndex];
+                mainRef.LoadTempFile(data.Location);
+                if (!mainRef.TStrpMnuItmDisableMsg.Checked)
+                    _ = MessageBox.Show("The entry has now been loaded in the main program!", "Backup Loaded Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
         {
-            if (searchIndex < 0 || searchIndex > LstBackupItems.Items.Count)
-            {
-                _ = MessageBox.Show("Please select a valid entry from the list!", "Backup Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!CheckForSelection(searchIndex))
                 return;
-            }
 
             string choice = Interaction.InputBox($"Confirm deleting the entry at location {LstBackupItems.SelectedIndex + 1}?" +
                 "\n\nType Y to continue, anything else to exit" +
@@ -57,6 +83,16 @@ namespace Remember
         private void LstBackupItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             searchIndex = LstBackupItems.SelectedIndex;
+        }
+
+        private bool CheckForSelection(int index)
+        {
+            if (index < 0 || index > LstBackupItems.Items.Count)
+            {
+                _ = MessageBox.Show("Please select a valid entry from the list!", "Backup Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
 
         private void LoadBackups()

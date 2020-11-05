@@ -279,7 +279,9 @@ namespace Remember
             {
                 BackupManager manager = new BackupManager(this);
                 manager.ShowDialog();
+                return;
             }
+            _ = MessageBox.Show("The Backup UI is already loaded!", "Backup UI Loaded Already", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 
@@ -391,14 +393,18 @@ namespace Remember
             }
         }
 
-        private void LoadTempFile()
+        public void LoadTempFile(string location)
         {
-            //if (!File.Exists())
-                //return;
+            if (!File.Exists(location))
+            {
+                MessageBox.Show("The backup file you are trying to load could not be read (Was it deleted?)", "Backup Read Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            ClearContents();
             LstVewPrograms.Items.Clear();
             ImgLstIcons.Images.Clear();
-            data = File.ReadAllLines(dataLocation)
+            data = File.ReadAllLines(location)
                 .Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
 
             foreach (ProgramData prog in data)
@@ -409,19 +415,9 @@ namespace Remember
                 prog.Icon = Icon.ExtractAssociatedIcon(prog.Location);
                 ImgLstIcons.Images.Add(prog.UniqueName, prog.Icon);
                 LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
+                string jsonOutput = JsonConvert.SerializeObject(prog) + "\n";
+                File.AppendAllText(dataLocation, jsonOutput);
             }
-        }
-
-        private void ClearContents()
-        {
-            File.WriteAllText(dataLocation, "");
-            LstVewPrograms.Items.Clear();
-            TxtNameInput.Clear();
-            TxtFileInput.Clear();
-            TxtFileNameInput.Clear();
-            TxtLocationInput.Clear();
-            TxtParametersInput.Clear();
-            TxtSize.Clear();
         }
 
         private void ChangeTimerSelection(int value)
@@ -494,6 +490,18 @@ namespace Remember
                     TStrpMnuItmCustomTimer.Checked = true;
                     break;
             }
+        }
+
+        private void ClearContents()
+        {
+            File.WriteAllText(dataLocation, "");
+            LstVewPrograms.Items.Clear();
+            TxtNameInput.Clear();
+            TxtFileInput.Clear();
+            TxtFileNameInput.Clear();
+            TxtLocationInput.Clear();
+            TxtParametersInput.Clear();
+            TxtSize.Clear();
         }
 
         private void ReloadContents(bool skipWrite)
