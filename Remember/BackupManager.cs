@@ -8,6 +8,7 @@ namespace Remember
 {
     public partial class BackupManager : Form
     {
+        string[] files = Directory.GetFiles(MainPage.Dir, "*.json");
         readonly List<BackupData> dataEntries = new List<BackupData>();
         readonly MainPage mainRef;
         public static bool IsActive = false;
@@ -33,7 +34,7 @@ namespace Remember
         {
             if (LstBackupItems.SelectedIndex < 0 || LstBackupItems.SelectedIndex > LstBackupItems.Items.Count)
             {
-                MessageBox.Show("Please select a valid entry from the list!", "Backup Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _ = MessageBox.Show("Please select a valid entry from the list!", "Backup Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -44,7 +45,7 @@ namespace Remember
             {
                 LstBackupItems.Items.RemoveAt(LstBackupItems.SelectedIndex);
                 if (!mainRef.TStrpMnuItmDisableMsg.Checked)
-                    MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _ = MessageBox.Show("The entry has now been deleted!", "Backup Delete Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -55,13 +56,11 @@ namespace Remember
 
         private void LoadBackups()
         {
-            string[] files = System.IO.Directory.GetFiles(Remember.MainPage.Dir, "*.json");
             if (files.Length > 0)
             {
                 foreach (string file in files)
                 {
-                    string fileName = file.Substring(file.LastIndexOf("\\"), file.LastIndexOf("."));
-                    MessageBox.Show(fileName + "\n\n" + file);
+                    string fileName = file.Substring(file.LastIndexOf("\\") + 1);
                     BackupData data = new BackupData(fileName, file);
                     dataEntries.Add(data);
                     LstBackupItems.Items.Add(data);

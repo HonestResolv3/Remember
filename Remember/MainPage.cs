@@ -42,7 +42,7 @@ namespace Remember
             InitializeComponent();
             if (!Directory.Exists(Dir))
                 Directory.CreateDirectory(Dir);
-            ChangeTimerSelection(0);
+            ChangeTimerSelection(-1);
             TmrSaveData.Start();
             resizeObj = new Resizer(this);
             Load += ResizerLoad;
@@ -93,7 +93,8 @@ namespace Remember
             data.Add(prog);
             string jsonOutput = $"{JsonConvert.SerializeObject(prog)}\n";
             File.AppendAllText(dataLocation, jsonOutput);
-            _ = MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!TStrpMnuItmDisableMsg.Checked)
+                _ = MessageBox.Show("Program has been added! You can see it in the list now", "Program Added Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnLoadFile_Click(object sender, EventArgs e)
@@ -179,7 +180,8 @@ namespace Remember
             ReloadContents(false);
             if (searchIsActive)
                 DoSearch();
-            _ = MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!TStrpMnuItmDisableMsg.Checked)
+                _ = MessageBox.Show("Program shortcut edited successfully!", "Program Edit Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnDuplicate_Click(object sender, EventArgs e)
@@ -252,7 +254,8 @@ namespace Remember
             {
                 string location = $"{folderChooserDialog.FileName}\\export.json";
                 ExportInformation(location);
-                _ = MessageBox.Show($"The data has now been exported to {location}!", "Data Exported Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (!TStrpMnuItmDisableMsg.Checked)
+                    _ = MessageBox.Show($"The data has now been exported to {location}!", "Data Exported Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -280,6 +283,11 @@ namespace Remember
         }
 
 
+        private void TStrpMnuItmOff_Click(object sender, EventArgs e)
+        {
+            ChangeTimerSelection(-1);
+        }
+
         private void TStrpMnuItm15Timer_Click(object sender, EventArgs e)
         {
             ChangeTimerSelection(0);
@@ -306,8 +314,14 @@ namespace Remember
             {
                 try
                 {
+                    if (File.Exists(Path.Combine(Dir, $"backup{Remember.Properties.Settings.Default.CurrentBackupCount}.json")))
+                    {
+                        Remember.Properties.Settings.Default.CurrentBackupCount++;
+                        return;
+                    }
+
                     File.Copy(dataLocation, Path.Combine(Dir, "programdata.json"));
-                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{++Remember.Properties.Settings.Default.CurrentBackupCount}.json"));
+                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{Remember.Properties.Settings.Default.CurrentBackupCount}.json"));
                 }
                 catch (IOException)
                 {
@@ -414,26 +428,40 @@ namespace Remember
         {
             switch (value)
             {
+                case -1:
+                    TStrpMnuItmOff.Checked = true;
+                    TStrpMnuItm15Timer.Checked = false;
+                    TStrpMnuItm30Timer.Checked = false;
+                    TStrpMnuItm60Timer.Checked = false;
+                    TStrpMnuItmCustomTimer.Checked = false;
+                    TmrSaveData.Stop();
+                    break;
                 case 0:
+                    TStrpMnuItmOff.Checked = false;
                     TStrpMnuItm15Timer.Checked = true;
                     TStrpMnuItm30Timer.Checked = false;
                     TStrpMnuItm60Timer.Checked = false;
                     TStrpMnuItmCustomTimer.Checked = false;
                     TmrSaveData.Interval = 900000;
+                    TmrSaveData.Start();
                     break;
                 case 1:
+                    TStrpMnuItmOff.Checked = false;
                     TStrpMnuItm15Timer.Checked = false;
                     TStrpMnuItm30Timer.Checked = true;
                     TStrpMnuItm60Timer.Checked = false;
                     TStrpMnuItmCustomTimer.Checked = false;
                     TmrSaveData.Interval = 1800000;
+                    TmrSaveData.Start();
                     break;
                 case 2:
+                    TStrpMnuItmOff.Checked = false;
                     TStrpMnuItm15Timer.Checked = false;
                     TStrpMnuItm30Timer.Checked = false;
                     TStrpMnuItm60Timer.Checked = true;
                     TStrpMnuItmCustomTimer.Checked = false;
                     TmrSaveData.Interval = 3600000;
+                    TmrSaveData.Start();
                     break;
                 case 3:
                     string timerInput = Interaction.InputBox("Enter the time interval backups are saved at" +
@@ -458,7 +486,8 @@ namespace Remember
                         _ = MessageBox.Show("An error occured when trying to add the custom timer", "Timer Set Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    _ = MessageBox.Show($"The backup save timer is now set to run every {TimerValue} minutes", "Timer Set Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (!TStrpMnuItmDisableMsg.Checked)
+                        _ = MessageBox.Show($"The backup save timer is now set to run every {TimerValue} minutes", "Timer Set Successfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TStrpMnuItm15Timer.Checked = false;
                     TStrpMnuItm30Timer.Checked = false;
                     TStrpMnuItm60Timer.Checked = false;
