@@ -34,7 +34,7 @@ namespace Remember
             this.LstBackupItems = new System.Windows.Forms.ListBox();
             this.BtnLoad = new System.Windows.Forms.Button();
             this.BtnDelete = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.LstPreviewArea = new System.Windows.Forms.ListBox();
             this.LblPreviewArea = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -46,7 +46,7 @@ namespace Remember
             this.LblBackupTitle.Location = new System.Drawing.Point(76, 5);
             this.LblBackupTitle.Name = "LblBackupTitle";
             this.LblBackupTitle.Size = new System.Drawing.Size(171, 30);
-            this.LblBackupTitle.TabIndex = 9;
+            this.LblBackupTitle.TabIndex = 1;
             this.LblBackupTitle.Text = "Manage Backups";
             // 
             // LstBackupItems
@@ -55,7 +55,7 @@ namespace Remember
             this.LstBackupItems.Location = new System.Drawing.Point(12, 41);
             this.LstBackupItems.Name = "LstBackupItems";
             this.LstBackupItems.Size = new System.Drawing.Size(305, 277);
-            this.LstBackupItems.TabIndex = 10;
+            this.LstBackupItems.TabIndex = 3;
             this.LstBackupItems.SelectedIndexChanged += new System.EventHandler(this.LstBackupItems_SelectedIndexChanged);
             // 
             // BtnLoad
@@ -63,7 +63,7 @@ namespace Remember
             this.BtnLoad.Location = new System.Drawing.Point(242, 329);
             this.BtnLoad.Name = "BtnLoad";
             this.BtnLoad.Size = new System.Drawing.Size(75, 23);
-            this.BtnLoad.TabIndex = 11;
+            this.BtnLoad.TabIndex = 5;
             this.BtnLoad.Text = "Load";
             this.BtnLoad.UseVisualStyleBackColor = true;
             this.BtnLoad.Click += new System.EventHandler(this.BtnLoad_Click);
@@ -73,18 +73,18 @@ namespace Remember
             this.BtnDelete.Location = new System.Drawing.Point(323, 329);
             this.BtnDelete.Name = "BtnDelete";
             this.BtnDelete.Size = new System.Drawing.Size(75, 23);
-            this.BtnDelete.TabIndex = 13;
+            this.BtnDelete.TabIndex = 6;
             this.BtnDelete.Text = "Delete";
             this.BtnDelete.UseVisualStyleBackColor = true;
             this.BtnDelete.Click += new System.EventHandler(this.BtnDelete_Click);
             // 
-            // listBox1
+            // LstPreviewArea
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(323, 41);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(304, 277);
-            this.listBox1.TabIndex = 14;
+            this.LstPreviewArea.FormattingEnabled = true;
+            this.LstPreviewArea.Location = new System.Drawing.Point(323, 41);
+            this.LstPreviewArea.Name = "LstPreviewArea";
+            this.LstPreviewArea.Size = new System.Drawing.Size(304, 277);
+            this.LstPreviewArea.TabIndex = 4;
             // 
             // LblPreviewArea
             // 
@@ -94,7 +94,7 @@ namespace Remember
             this.LblPreviewArea.Location = new System.Drawing.Point(406, 5);
             this.LblPreviewArea.Name = "LblPreviewArea";
             this.LblPreviewArea.Size = new System.Drawing.Size(133, 30);
-            this.LblPreviewArea.TabIndex = 15;
+            this.LblPreviewArea.TabIndex = 2;
             this.LblPreviewArea.Text = "Preview Area";
             // 
             // BackupManager
@@ -103,7 +103,7 @@ namespace Remember
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(639, 360);
             this.Controls.Add(this.LblPreviewArea);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.LstPreviewArea);
             this.Controls.Add(this.BtnDelete);
             this.Controls.Add(this.BtnLoad);
             this.Controls.Add(this.LstBackupItems);
@@ -125,7 +125,7 @@ namespace Remember
         private System.Windows.Forms.ListBox LstBackupItems;
         private System.Windows.Forms.Button BtnLoad;
         private System.Windows.Forms.Button BtnDelete;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox LstPreviewArea;
         private System.Windows.Forms.Label LblPreviewArea;
     }
 }

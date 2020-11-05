@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Remember
@@ -83,7 +85,13 @@ namespace Remember
         private void LstBackupItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             searchIndex = LstBackupItems.SelectedIndex;
+            BackupData backup = dataEntries[searchIndex];
+            List<ProgramData> data = File.ReadAllLines(backup.Location).Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();
+            LstPreviewArea.Items.Clear();
+            foreach (ProgramData prog in data)
+                LstPreviewArea.Items.Add(prog);
         }
+
 
         private bool CheckForSelection(int index)
         {
