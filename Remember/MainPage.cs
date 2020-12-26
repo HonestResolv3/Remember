@@ -70,7 +70,7 @@ namespace Remember
             AddElement(false);
         }
 
-        public void AddElement(bool skipPrompts)
+        private void AddElement(bool skipPrompts)
         {
             if (!File.Exists(TxtLocationInput.Text) && skipPrompts)
             {
@@ -78,8 +78,8 @@ namespace Remember
                 return;
             }
 
-            FileInfo fInfo = new FileInfo(TxtLocationInput.Text);
-            ProgramData prog = new ProgramData(data[search].Name, fInfo.Name, fInfo.FullName, data[search].Parameters, (ulong)fInfo.Length);
+            FileInfo fInfo = new FileInfo(TxtFileInput.Text);
+            ProgramData prog = null;
             if (!skipPrompts)
             {
                 string name = Interaction.InputBox("What would you like to name this program shotcut? (Click X or Cancel to skip)", "Add name");
@@ -87,6 +87,10 @@ namespace Remember
                 string parameters = Interaction.InputBox("Would you like to add any additional parameters? (Click X or Cancel to skip)", "Add parameters");
                 parameters = !string.IsNullOrWhiteSpace(parameters) ? parameters : "None";
                 prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length);
+            }
+            else
+            {
+                prog = new ProgramData(data[search].Name, fInfo.Name, fInfo.FullName, data[search].Parameters, (ulong)fInfo.Length);
             }
             ImgLstIcons.Images.Add(prog.UniqueName, Bitmap.FromHicon(prog.Icon.Handle));
             LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);

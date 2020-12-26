@@ -465,7 +465,7 @@ namespace Remember
             // TStrpMnuItmBackupUI
             // 
             this.TStrpMnuItmBackupUI.Name = "TStrpMnuItmBackupUI";
-            this.TStrpMnuItmBackupUI.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItmBackupUI.Size = new System.Drawing.Size(156, 22);
             this.TStrpMnuItmBackupUI.Text = "Load Backup UI";
             this.TStrpMnuItmBackupUI.Click += new System.EventHandler(this.TStrpMnuItmBackupUI_Click);
             // 

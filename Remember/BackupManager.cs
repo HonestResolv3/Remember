@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -27,6 +28,9 @@ namespace Remember
                 resizeObj = new Resizer(this);
                 Load += ResizerLoad;
                 Resize += ResizerResize;
+                FormBorderStyle = FormBorderStyle.Sizable;
+                MaximizeBox = true;
+                MaximumSize = new Size(0, 0);
             }
         }
 
