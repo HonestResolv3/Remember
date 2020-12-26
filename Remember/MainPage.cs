@@ -89,9 +89,7 @@ namespace Remember
                 prog = new ProgramData(name, fInfo.Name, fInfo.FullName, parameters, (ulong)fInfo.Length);
             }
             else
-            {
                 prog = new ProgramData(data[search].Name, fInfo.Name, fInfo.FullName, data[search].Parameters, (ulong)fInfo.Length);
-            }
             ImgLstIcons.Images.Add(prog.UniqueName, Bitmap.FromHicon(prog.Icon.Handle));
             LstVewPrograms.Items.Add(prog.Name, prog.UniqueName);
             data.Add(prog);
@@ -317,26 +315,16 @@ namespace Remember
         private void TmrSaveData_Tick(object sender, EventArgs e)
         {
             if (File.Exists(dataLocation))
-            {
-                try
-                {
-                    if (File.Exists(Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json")))
-                    {
-                        Remember.Properties.Settings.Default.CurrentBackupCount++;
-                        return;
-                    }
-
-                    File.Copy(dataLocation, Path.Combine(Dir, "programdata.json"));
-                    FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json"));
-                }
-                catch (IOException)
-                {
-                    // If the file already exists, do not do anything, I will make a label telling the user there's an error as well if they modify the files
-                }
-            }
+                SaveBackup(false);
         }
 
-        private void CheckForResizeSelection()
+
+        private void TStrpMnuItmSaveBckFle_Click(object sender, EventArgs e)
+        {
+            SaveBackup(true);
+        }
+
+            private void CheckForResizeSelection()
         {
             if (!TStrpMnuItmResizing.Checked)
             {
@@ -567,6 +555,28 @@ namespace Remember
             else
                 obj = searchInformation[index];
             return obj;
+        }
+
+        private void SaveBackup(bool DisplayMessage)
+        {
+            try
+            {
+                if (File.Exists(Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json")))
+                {
+                    Remember.Properties.Settings.Default.CurrentBackupCount++;
+                    return;
+                }
+
+                File.Copy(dataLocation, Path.Combine(Dir, "programdata.json"));
+                FileSystem.Rename(Path.Combine(Dir, "programdata.json"), Path.Combine(Dir, $"backup{Properties.Settings.Default.CurrentBackupCount}.json"));
+                if (DisplayMessage)
+                    MessageBox.Show("Your backup has successfully been saved!\nYou can go to the Backup UI to see it", "Backup Save Successful");
+            }
+            catch (IOException e)
+            {
+                MessageBox.Show("Message:" + e.Message + "\nToString: " + e.ToString());
+                // If the file already exists, do not do anything, I will make a label telling the user there's an error as well if they modify the files
+            }
         }
 
         /**

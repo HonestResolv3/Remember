@@ -88,6 +88,9 @@ namespace Remember
 
         private void LstBackupItems_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (LstBackupItems.SelectedIndex == -1)
+                return;
+
             searchIndex = LstBackupItems.SelectedIndex;
             BackupData backup = dataEntries[searchIndex];
             List<ProgramData> data = File.ReadAllLines(backup.Location).Select(line => JsonConvert.DeserializeObject<ProgramData>(line)).ToList();

@@ -75,6 +75,7 @@ namespace Remember
             this.TStrpMnuItmCustomTimer = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmBackup = new System.Windows.Forms.ToolStripMenuItem();
             this.TStrpMnuItmBackupUI = new System.Windows.Forms.ToolStripMenuItem();
+            this.TStrpMnuItmSaveBckFle = new System.Windows.Forms.ToolStripMenuItem();
             this.MnuItmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnClearSearch = new System.Windows.Forms.Button();
             this.LstVewPrograms = new System.Windows.Forms.ListView();
@@ -457,7 +458,8 @@ namespace Remember
             // MnuItmBackup
             // 
             this.MnuItmBackup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.TStrpMnuItmBackupUI});
+            this.TStrpMnuItmBackupUI,
+            this.TStrpMnuItmSaveBckFle});
             this.MnuItmBackup.Name = "MnuItmBackup";
             this.MnuItmBackup.Size = new System.Drawing.Size(58, 20);
             this.MnuItmBackup.Text = "Backup";
@@ -465,9 +467,16 @@ namespace Remember
             // TStrpMnuItmBackupUI
             // 
             this.TStrpMnuItmBackupUI.Name = "TStrpMnuItmBackupUI";
-            this.TStrpMnuItmBackupUI.Size = new System.Drawing.Size(156, 22);
+            this.TStrpMnuItmBackupUI.Size = new System.Drawing.Size(180, 22);
             this.TStrpMnuItmBackupUI.Text = "Load Backup UI";
             this.TStrpMnuItmBackupUI.Click += new System.EventHandler(this.TStrpMnuItmBackupUI_Click);
+            // 
+            // TStrpMnuItmSaveBckFle
+            // 
+            this.TStrpMnuItmSaveBckFle.Name = "TStrpMnuItmSaveBckFle";
+            this.TStrpMnuItmSaveBckFle.Size = new System.Drawing.Size(180, 22);
+            this.TStrpMnuItmSaveBckFle.Text = "Save Backup File";
+            this.TStrpMnuItmSaveBckFle.Click += new System.EventHandler(this.TStrpMnuItmSaveBckFle_Click);
             // 
             // MnuItmAbout
             // 
@@ -616,6 +625,7 @@ namespace Remember
         private System.Windows.Forms.ToolStripMenuItem TStrpMnuItm60Timer;
         private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmCustomTimer;
         private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmOff;
+        private System.Windows.Forms.ToolStripMenuItem TStrpMnuItmSaveBckFle;
     }
 }
 
